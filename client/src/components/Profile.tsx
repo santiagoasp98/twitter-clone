@@ -16,7 +16,7 @@ import profilePicture from '../assets/profile-picture.jpeg'
 import profileBanner from '../assets/profile-banner.jpeg'
 import balloon from '../assets/profile-balloon.svg'
 import calendar from '../assets/profile-calendar.svg'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { EditProfileModal } from './modals/EditProfileModal'
 
 import logoutIcon from '../assets/logout.svg'
@@ -32,18 +32,23 @@ export const Profile: React.FC = () => {
   const [loadingProfile, setLoadingProfile] = useState(true)
   const [visibleEditProfile, setVisibleEditProfile] = useState(false)
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      if (username) {
+  const fetchUser = useCallback(async () => {
+    if (username) {
+      setLoadingProfile(true)
+      try {
         const user = await getUserByUsername(username)
         setUser(user)
+      } catch (err) {
+        console.log('Error getting the user: ', err)
+      } finally {
         setLoadingProfile(false)
       }
     }
+  }, [username, getUserByUsername])
 
+  useEffect(() => {
     fetchUser()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [username, user])
+  }, [fetchUser])
 
   return (
     <>

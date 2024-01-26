@@ -43,10 +43,16 @@ export class AuthService {
         return this.createReturnUser(user)
     }
 
-    // * Returns 3 random users
     async getUsers(excludedUserId: string) {
+        // Get all the users that 'excludedUserId' follows
+        const following = await this.followerModel
+            .find({ follower: excludedUserId })
+            .select('following')
+        const followingIds = following.map((f) => f.following)
+
+        // Get 3 users that 'excludedUserId' does not follow
         return await this.userModel.aggregate([
-            { $match: { _id: { $ne: excludedUserId } } },
+            { $match: { _id: { $nin: [...followingIds, excludedUserId] } } },
             { $sample: { size: 3 } },
         ])
     }
