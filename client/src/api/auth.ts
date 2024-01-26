@@ -4,6 +4,13 @@ import axiosInstance from './axios'
 export const getUserRequest = (username: string) =>
   axiosInstance.get(`/auth/${username}`)
 
+export const getUsersRequest = (excludedId: string, access_token: string) =>
+  axiosInstance.get(`/auth?excludedId=${excludedId}`, {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  })
+
 export const registerRequest = (newUser: CreateUserDto) =>
   axiosInstance.post('/auth/register', newUser)
 

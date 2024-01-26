@@ -24,9 +24,10 @@ export class AuthController {
         return this.authService.getUserByUsername(username)
     }
 
+    @UseGuards(AuthGuard)
     @Get()
-    async getUsers() {
-        return this.authService.getUsers()
+    async getUsers(@Param('excludedId') excludedId: string) {
+        return this.authService.getUsers(excludedId)
     }
 
     @Post('/register')

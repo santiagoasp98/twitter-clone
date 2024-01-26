@@ -43,9 +43,12 @@ export class AuthService {
         return this.createReturnUser(user)
     }
 
-    // * Returns 10 users
-    async getUsers() {
-        return await this.userModel.find().limit(10)
+    // * Returns 3 random users
+    async getUsers(excludedUserId: string) {
+        return await this.userModel.aggregate([
+            { $match: { _id: { $ne: excludedUserId } } },
+            { $sample: { size: 3 } },
+        ])
     }
 
     async register(userData: CreateUserDto, res: Response) {

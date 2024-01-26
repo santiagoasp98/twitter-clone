@@ -28,7 +28,6 @@ const style = (theme: Theme) => ({
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  height: 600,
   width: 500,
   bgcolor: '#000',
   border: `1px solid ${theme.myPalette.greyDivider}`,
@@ -46,7 +45,7 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
 
-  const [month, setMonth] = useState(1)
+  const [month, setMonth] = useState(0)
   const [day, setDay] = useState(1)
   const [year, setYear] = useState(new Date().getFullYear())
 

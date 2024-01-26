@@ -25,16 +25,19 @@ import MenuSaved from '../assets/menu-saved.svg'
 import MenuProfile from '../assets/menu-profile.svg'
 import MenuOptions from '../assets/menu-options.svg'
 import { useAuth } from '../hooks/useAuth'
+import { SearchBox } from '../components/SearchBox'
+import { SuggestUsers } from '../components/SuggestUsers'
+import { Trends } from '../components/Trends'
 
 const StyledGrid = styled(Grid)(() => ({
   height: '100vh',
   overflow: 'hidden',
 }))
 
-const StyledColumn = styled(Grid)(({ theme }) => ({
+const StyledColumn = styled(Grid)(() => ({
   position: 'sticky',
   top: 0,
-  padding: theme.spacing(2),
+  padding: 0,
   height: '100%',
   overflow: 'hidden',
 }))
@@ -132,7 +135,17 @@ export const Dashboard: React.FC = () => {
             style={{ height: '100vh' }}
           >
             <Grid item xs={8}>
-              trends + users
+              <Grid container direction="column" spacing={2}>
+                <Grid item>
+                  <SearchBox />
+                </Grid>
+                <Grid item>
+                  <SuggestUsers />
+                </Grid>
+                <Grid item>
+                  <Trends />
+                </Grid>
+              </Grid>
             </Grid>
             <Grid item xs={4}></Grid>
           </Grid>

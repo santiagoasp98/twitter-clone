@@ -12,6 +12,8 @@ declare module '@mui/material/styles' {
     myPalette: {
       greyFont: string
       greyShadow: string
+      darkGreyShadow: string
+      greyBackground: string
       greyDivider: string
     }
   }
@@ -19,6 +21,8 @@ declare module '@mui/material/styles' {
     myPalette?: {
       greyFont?: string
       greyShadow?: string
+      darkGreyShadow?: string
+      greyBackground?: string
       greyDivider?: string
     }
   }
@@ -30,7 +34,9 @@ const theme = createTheme({
   },
   myPalette: {
     greyFont: 'rgba(170, 170, 170, 0.8)',
-    greyShadow: 'rgba(45, 45, 45, 0.8)',
+    greyShadow: 'rgba(32, 28, 28, 0.8)',
+    darkGreyShadow: 'rgba(43, 43, 43, 0.8)',
+    greyBackground: 'rgba(30, 30, 30, 0.8)',
     greyDivider: 'rgba(61, 61, 61, 0.8)',
   },
   components: {

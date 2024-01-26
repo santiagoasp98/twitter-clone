@@ -29,7 +29,6 @@ const style = (theme: Theme) => ({
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  height: 500,
   width: 500,
   bgcolor: '#000',
   boxShadow: 24,
@@ -162,7 +161,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
           </Container>
 
           <Container>
-            <Typography>
+            <Typography sx={{ mt: 4 }}>
               Don't you have an account?{' '}
               <Link
                 component="button"

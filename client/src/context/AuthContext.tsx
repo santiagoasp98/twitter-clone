@@ -2,6 +2,7 @@ import { ReactNode, createContext, useEffect, useState } from 'react'
 import { CreateUserDto, User, UserLoginDto, UserUpdateDto } from '../types/auth'
 import {
   getUserRequest,
+  getUsersRequest,
   loginRequest,
   logoutRequest,
   registerRequest,
@@ -17,6 +18,7 @@ interface AuthContextType {
   token: string
   loading: boolean
   getUserByUsername: (username: string) => Promise<User | null>
+  getUsers: (excludedId: string) => Promise<User[]>
   register: (user: CreateUserDto) => void
   login: (userData: UserLoginDto) => void
   logout: () => void
@@ -38,33 +40,30 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   useEffect(() => {
     const verify = async () => {
-      const cookies = Cookies.get()
-      if (cookies.access_token) {
-        try {
-          const res = await verifyTokenRequest(cookies.access_token)
-          if (!res.data) {
-            setIsLoggedIn(false)
-            setUser(null)
-            return
-          }
+      let isLoggedIn = false
+      let user = null
+      let token = ''
 
-          setIsLoggedIn(true)
-          setUser(res.data.user)
-          setToken(res.data.access_token)
-        } catch (error) {
-          console.log(error)
-          setIsLoggedIn(false)
-          setUser(null)
-          setToken('')
+      try {
+        const cookies = Cookies.get()
+        if (cookies.access_token) {
+          const res = await verifyTokenRequest(cookies.access_token)
+          if (res.data) {
+            isLoggedIn = true
+            user = res.data.user
+            token = res.data.access_token
+          }
         }
-      } else {
-        setIsLoggedIn(false)
-        setUser(null)
-        setToken('')
-        return
+      } catch (error) {
+        console.log(error)
+      } finally {
+        setIsLoggedIn(isLoggedIn)
+        setUser(user)
+        setToken(token)
+        setLoading(false)
       }
-      setLoading(false)
     }
+
     verify()
   }, [])
 
@@ -75,6 +74,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } catch (error) {
       console.log('Error getting user: ', error)
       return null
+    }
+  }
+
+  const getUsers = async (excludedId: string): Promise<User[]> => {
+    try {
+      const response = await getUsersRequest(excludedId, token)
+      return response.data
+    } catch (error) {
+      console.log('Error getting users: ', error)
+      return []
     }
   }
 
@@ -130,6 +139,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         token,
         loading,
         getUserByUsername,
+        getUsers,
         register,
         login,
         logout,
