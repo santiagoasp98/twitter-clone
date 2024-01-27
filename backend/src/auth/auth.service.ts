@@ -35,6 +35,7 @@ export class AuthService {
         private jwtService: JwtService,
     ) {}
 
+    // Fetch a user by username and return a ReturnUser object
     async getUserByUsername(username: string) {
         const user = await this.userModel.findOne({ username: username })
         if (!user) {
@@ -43,20 +44,33 @@ export class AuthService {
         return this.createReturnUser(user)
     }
 
-    async getUsers(excludedUserId: string) {
-        // Get all the users that 'excludedUserId' follows
-        const following = await this.followerModel
-            .find({ follower: excludedUserId })
-            .select('following')
-        const followingIds = following.map((f) => f.following)
+    // Fetch users that the excluded user is not following and return as ReturnUser objects
+    async getUsers(excludedUserId: string): Promise<ReturnUser[]> {
+        // Get the IDs of the users that the excluded user is following
+        const following: Follower[] = await this.followerModel.find({
+            follower: excludedUserId,
+        })
+        const followingIds = following.map(
+            (userFollowing) => userFollowing.following,
+        )
 
-        // Get 3 users that 'excludedUserId' does not follow
-        return await this.userModel.aggregate([
-            { $match: { _id: { $nin: [...followingIds, excludedUserId] } } },
-            { $sample: { size: 3 } },
-        ])
+        // Find users that the excluded user is not following
+        const usersNotFollowed = await this.userModel
+            .find({ _id: { $nin: [...followingIds, excludedUserId] } })
+            .limit(3)
+
+        // Map User objects to ReturnUser objects using createReturnUser
+        const returnUsers: Promise<ReturnUser>[] = usersNotFollowed.map(
+            (user) => this.createReturnUser(user),
+        )
+
+        // Wait for all promises to resolve
+        const resolvedReturnUsers: ReturnUser[] = await Promise.all(returnUsers)
+
+        return resolvedReturnUsers
     }
 
+    // Register a new user
     async register(userData: CreateUserDto, res: Response) {
         const userFound = await this.findUser(userData)
 
@@ -70,6 +84,7 @@ export class AuthService {
         return this.generateTokenAndSetCookie(savedUser, res)
     }
 
+    // Login a user and return a token
     async login(
         userData: UserLoginDto,
         res: Response,
@@ -85,6 +100,7 @@ export class AuthService {
         return this.generateTokenAndSetCookie(userFound, res)
     }
 
+    // Logout a user by clearing the access_token cookie
     async logout(res: Response) {
         res.clearCookie('access_token')
         res.status(200).json({ message: 'Logged out' })
@@ -124,6 +140,7 @@ export class AuthService {
         res.status(200).json({ message: 'User deleted' })
     }
 
+    // Verify a token and return its payload
     async verifyToken(token: string) {
         try {
             const payload = this.jwtService.verify(token)
@@ -138,7 +155,7 @@ export class AuthService {
     }
 
     /**
-     * Utils:
+     * Utility functions:
      */
 
     private async generateTokenAndSetCookie(

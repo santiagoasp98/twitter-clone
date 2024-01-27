@@ -15,6 +15,11 @@ export class Tweet {
         type: [{ type: Types.ObjectId, ref: 'User' }],
     })
     author: User
+
+    @Prop({
+        default: Date.now,
+    })
+    tweetedAt: Date
 }
 
 export const TweetSchema = SchemaFactory.createForClass(Tweet)

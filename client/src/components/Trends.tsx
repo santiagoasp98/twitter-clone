@@ -55,7 +55,7 @@ export const Trends: React.FC = () => {
       sx={{
         borderRadius: '20px',
         width: '100%',
-        height: '49vh',
+        height: '100%',
         overflow: 'auto',
         backgroundColor: (theme: Theme) => theme.myPalette.greyBackground,
         paddingTop: 2,
@@ -72,7 +72,7 @@ export const Trends: React.FC = () => {
             alignItems: 'center',
             justifyContent: 'space-between',
             width: 'auto',
-            height: '80px',
+            padding: '10px 0',
             '&:hover': {
               cursor: 'pointer',
               bgcolor: (theme: Theme) => theme.myPalette.darkGreyShadow,

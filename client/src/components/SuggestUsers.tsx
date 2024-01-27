@@ -37,9 +37,11 @@ export const SuggestUsers: React.FC = () => {
       <Typography variant="h6" sx={{ fontWeight: 'bold', ml: 2, mb: 2 }}>
         You might like
       </Typography>
-      {users.map((user) => (
-        <UserCard key={user.id} user={user} />
-      ))}
+      {users
+        .filter((suggUser) => suggUser.id !== user?.id)
+        .map((suggUser) => (
+          <UserCard key={suggUser.id} user={suggUser} />
+        ))}
     </Box>
   )
 }
