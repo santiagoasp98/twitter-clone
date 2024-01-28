@@ -22,15 +22,34 @@ import { EditProfileModal } from './modals/EditProfileModal'
 import logoutIcon from '../assets/logout.svg'
 import { useParams } from 'react-router-dom'
 import { User } from '../types/auth'
+import {
+  checkFollowing,
+  handleFollow,
+  handleUnfollow,
+} from '../utils/followersUtils'
 
 export const Profile: React.FC = () => {
-  const { user: userLoggedIn, getUserByUsername, logout } = useAuth()
+  const { user: userLoggedIn, getUserByUsername, logout, token } = useAuth()
 
   const { username } = useParams()
 
   const [user, setUser] = useState<User | null>(null)
   const [loadingProfile, setLoadingProfile] = useState(true)
   const [visibleEditProfile, setVisibleEditProfile] = useState(false)
+
+  const [isFollowing, setIsFollowing] = useState(false)
+  const [hover, setHover] = useState(false)
+
+  useEffect(() => {
+    const fetchFollowingStatus = async () => {
+      if (userLoggedIn && user) {
+        const result = await checkFollowing(userLoggedIn, user)
+        setIsFollowing(result)
+      }
+    }
+
+    fetchFollowingStatus()
+  }, [userLoggedIn, user])
 
   const fetchUser = useCallback(async () => {
     if (username) {
@@ -93,7 +112,7 @@ export const Profile: React.FC = () => {
                 border: '4px solid black',
               }}
             />
-            {user?.id === userLoggedIn?.id && (
+            {user?.id === userLoggedIn?.id ? (
               <>
                 <Button
                   variant="outlined"
@@ -132,6 +151,38 @@ export const Profile: React.FC = () => {
                   <img src={logoutIcon} height={25} width={25} />
                 </Box>
               </>
+            ) : (
+              user && (
+                <Button
+                  onClick={(event) => {
+                    event.stopPropagation()
+                    isFollowing
+                      ? handleUnfollow(user.id, userLoggedIn, token, () =>
+                          setIsFollowing(false),
+                        )
+                      : handleFollow(user.id, userLoggedIn, token, () =>
+                          setIsFollowing(true),
+                        )
+                  }}
+                  onMouseEnter={() => setHover(true)}
+                  onMouseLeave={() => setHover(false)}
+                  variant="contained"
+                  sx={{
+                    position: 'absolute',
+                    bottom: -45,
+                    left: '80%',
+                    color: 'black',
+                    bgcolor: isFollowing ? 'grey' : 'white',
+                    borderRadius: '20px',
+                    mr: 2,
+                    '&:hover': {
+                      bgcolor: isFollowing ? 'grey' : 'white',
+                    },
+                  }}
+                >
+                  {isFollowing ? (hover ? 'Unfollow' : 'Following') : 'Follow'}
+                </Button>
+              )
             )}
           </Box>
 
@@ -238,7 +289,6 @@ export const Profile: React.FC = () => {
                 </Typography>
               </Link>
             </Box>
-            {/* <button onClick={logout}>Log Out</button> */}
           </Box>
         </Box>
       )}

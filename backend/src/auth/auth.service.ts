@@ -181,10 +181,10 @@ export class AuthService {
 
     private async createReturnUser(user: User): Promise<ReturnUser> {
         const followersCount = await this.followerModel.countDocuments({
-            following: user._id,
+            following: user._id.toString(),
         })
         const followingCount = await this.followerModel.countDocuments({
-            follower: user._id,
+            follower: user._id.toString(),
         })
 
         return {
