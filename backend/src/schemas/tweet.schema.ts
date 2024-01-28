@@ -6,6 +6,8 @@ import { User } from './user.schema'
     timestamps: true,
 })
 export class Tweet {
+    _id: string
+
     @Prop({
         required: true,
     })
@@ -20,6 +22,11 @@ export class Tweet {
         default: Date.now,
     })
     tweetedAt: Date
+
+    @Prop({
+        default: 0,
+    })
+    likesCount: number
 }
 
 export const TweetSchema = SchemaFactory.createForClass(Tweet)
