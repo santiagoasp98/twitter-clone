@@ -9,12 +9,14 @@ import {
   TextField,
   Theme,
   Typography,
+  useTheme,
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import { useAuth } from '../../hooks/useAuth'
 
 import cameraIcon from '../../assets/profile-camera.svg'
 import { DateFields } from '../utils/DateFields'
+import getModalStyle from '../../utils/modalStyle'
 
 interface EditProfileModalProps {
   visible: boolean
@@ -24,22 +26,6 @@ interface EditProfileModalProps {
   banner: string
 }
 
-const style = (theme: Theme) => ({
-  position: 'absolute' as const,
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  height: 700,
-  width: 600,
-  overflow: 'auto',
-  bgcolor: '#000',
-  boxShadow: 24,
-  borderRadius: 3,
-  border: `1px solid ${theme.myPalette.greyDivider}`,
-  p: 0,
-  pb: 2,
-})
-
 export const EditProfileModal: React.FC<EditProfileModalProps> = ({
   visible,
   close,
@@ -47,6 +33,12 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
   profilePic,
   banner,
 }) => {
+  const theme = useTheme()
+  const style = getModalStyle(theme, {
+    height: 700,
+    width: 600,
+  })
+
   const [name, setName] = useState(user.fullname)
   const [bio, setBio] = useState(user.bio)
   const [day, setDay] = useState(new Date(user.dateOfBirth).getDate())

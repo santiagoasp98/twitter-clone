@@ -88,25 +88,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }
 
   const register = async (user: CreateUserDto) => {
-    try {
-      const response = await registerRequest(user)
-      setUser(response.data.user)
-      setToken(response.data.access_token)
-      setIsLoggedIn(true)
-    } catch (error) {
-      console.log('Error during register: ', error)
-    }
+    const response = await registerRequest(user)
+    setUser(response.data.user)
+    setToken(response.data.access_token)
+    setIsLoggedIn(true)
   }
 
   const login = async (userData: UserLoginDto) => {
-    try {
-      const response = await loginRequest(userData)
-      setUser(response.data.user)
-      setToken(response.data.access_token)
-      setIsLoggedIn(true)
-    } catch (error) {
-      console.error('Error during login: ', error)
-    }
+    const response = await loginRequest(userData)
+    setUser(response.data.user)
+    setToken(response.data.access_token)
+    setIsLoggedIn(true)
   }
 
   const logout = async () => {

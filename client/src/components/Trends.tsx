@@ -59,6 +59,7 @@ export const Trends: React.FC = () => {
         overflow: 'auto',
         backgroundColor: (theme: Theme) => theme.myPalette.greyBackground,
         paddingTop: 2,
+        mb: 1,
       }}
     >
       <Typography variant="h6" sx={{ fontWeight: 'bold', ml: 2, mb: 2 }}>

@@ -113,7 +113,17 @@ export const Dashboard: React.FC = () => {
         {/* ******************* */}
 
         {/* Columna Central (Scrolleable) */}
-        <ScrollableColumn item xs={5}>
+        <ScrollableColumn
+          item
+          xs={5}
+          sx={{
+            height: '100vh',
+            overflow: 'auto',
+            '&::-webkit-scrollbar': {
+              display: 'none',
+            },
+          }}
+        >
           {/* Main */}
           <Routes>
             <Route path="/:username" element={<Profile />} />
@@ -137,8 +147,23 @@ export const Dashboard: React.FC = () => {
         {/* Columna Derecha */}
         <StyledColumn item xs={4}>
           {/* Trends */}
-          <Grid container spacing={0} sx={{ flexWrap: 'nowrap' }}>
-            <Grid item xs={8}>
+          <Grid
+            container
+            spacing={0}
+            sx={{ flexWrap: 'nowrap' }}
+            overflow="auto"
+          >
+            <Grid
+              item
+              xs={8}
+              sx={{
+                height: '100vh',
+                overflow: 'auto',
+                '&::-webkit-scrollbar': {
+                  display: 'none',
+                },
+              }}
+            >
               <Grid container direction="column" spacing={2}>
                 <Grid item>
                   <SearchBox />
@@ -146,7 +171,7 @@ export const Dashboard: React.FC = () => {
                 <Grid item>
                   <SuggestUsers />
                 </Grid>
-                <Grid item style={{ height: '100vh' }} overflow="auto">
+                <Grid item>
                   <Trends />
                 </Grid>
               </Grid>
