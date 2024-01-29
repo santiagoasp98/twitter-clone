@@ -180,10 +180,13 @@ export const Dashboard: React.FC = () => {
           </Grid>
         </StyledColumn>
       </StyledGrid>
-      <NewTweetModal
-        visible={visibleNewTweet}
-        close={() => setVisibleNewTweet(false)}
-      />
+      {user && (
+        <NewTweetModal
+          author={user.id}
+          visible={visibleNewTweet}
+          close={() => setVisibleNewTweet(false)}
+        />
+      )}
     </>
   )
 }

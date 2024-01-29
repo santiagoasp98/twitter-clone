@@ -1,5 +1,6 @@
-import { Box, Tab, Tabs, Theme, Typography } from '@mui/material'
+import { Box, Tab, Tabs, Theme } from '@mui/material'
 import { useState } from 'react'
+import { Tweets } from './Tweets'
 
 interface TabsMenuProps {
   children?: React.ReactNode
@@ -19,8 +20,8 @@ function CustomTabPanel(props: TabsMenuProps) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+        <Box sx={{ mb: 1 }}>
+          <Box>{children}</Box>
         </Box>
       )}
     </div>
@@ -63,7 +64,7 @@ export const TabsMenu: React.FC = () => {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        Tweets
+        <Tweets />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         Replies :p

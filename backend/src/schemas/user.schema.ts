@@ -46,9 +46,7 @@ export class User {
     @Prop()
     profilePicture: string
 
-    @Prop({
-        type: [{ type: Types.ObjectId, ref: 'Tweet' }],
-    })
+    @Prop({ type: [{ type: Types.ObjectId, ref: 'Tweet' }] })
     tweets: Tweet[]
 
     createdAt: Date

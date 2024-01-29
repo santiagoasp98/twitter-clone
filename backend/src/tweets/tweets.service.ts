@@ -4,7 +4,7 @@ import {
     NotFoundException,
 } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
-import { Model } from 'mongoose'
+import { Model, Types } from 'mongoose'
 import { User } from 'src/schemas/user.schema'
 import { CreateTweetDto, UpdateTweetDto } from './dto/tweet.dto'
 import { Tweet } from 'src/schemas/tweet.schema'
@@ -48,7 +48,9 @@ export class TweetsService {
             if (!userFound) {
                 throw new NotFoundException('Could not find the user')
             }
-            return userFound.tweets
+            return userFound.tweets.sort(
+                (t1, t2) => t2.tweetedAt.getTime() - t1.tweetedAt.getTime(),
+            )
         } catch (error) {
             console.log(error)
             throw new InternalServerErrorException(
@@ -67,6 +69,17 @@ export class TweetsService {
             if (!updatedTweet) {
                 throw new NotFoundException('Could not find the tweet')
             }
+
+            // Convert tweetId to ObjectId
+            const tweetObjectId = new Types.ObjectId(tweetId)
+
+            // Update content tweet in author's array
+            await this.userModel.updateOne(
+                { _id: updatedTweet.author },
+                { $set: { 'tweets.$[elem].content': tweetData.content } },
+                { arrayFilters: [{ 'elem._id': tweetObjectId }] },
+            )
+
             return updatedTweet
         } catch (error) {
             console.log(error)
@@ -77,19 +90,25 @@ export class TweetsService {
     }
 
     async deleteTweet(tweetId: string) {
-        let deletedTweet: Tweet | null
-        try {
-            deletedTweet = await this.tweetModel.findByIdAndDelete(tweetId)
-        } catch (error) {
-            console.log(error)
-            throw new InternalServerErrorException('Delete failed')
-        }
+        const tweet = await this.tweetModel.findById(tweetId)
 
-        if (!deletedTweet) {
+        if (!tweet) {
             throw new NotFoundException('Tweet not found')
         }
 
-        return 'Tweet deleted successfully'
+        // Convert tweetId to ObjectId
+        const tweetObjectId = new Types.ObjectId(tweetId)
+
+        // Delete tweet from author's array
+        await this.userModel.updateOne(
+            { _id: tweet.author },
+            { $pull: { tweets: { _id: tweetObjectId } } },
+        )
+
+        // Delete the tweet
+        await this.tweetModel.deleteOne({ _id: tweetId })
+
+        return { message: 'Tweet deleted successfully' }
     }
 
     async likeTweet(tweetId: string) {

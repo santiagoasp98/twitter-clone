@@ -13,9 +13,7 @@ export class Tweet {
     })
     content: string
 
-    @Prop({
-        type: [{ type: Types.ObjectId, ref: 'User' }],
-    })
+    @Prop({ type: Types.ObjectId, ref: 'User', required: true })
     author: User
 
     @Prop({
