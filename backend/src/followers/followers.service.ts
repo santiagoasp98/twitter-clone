@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import {
+    ConflictException,
+    Injectable,
+    NotFoundException,
+} from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { Follower } from 'src/schemas/follower.schema'
@@ -14,6 +18,15 @@ export class FollowersService {
 
     async followUser(followData: FollowerDto): Promise<Follower> {
         try {
+            // check if follow exists
+            const followFound = await this.followerModel.find({
+                follower: followData.followerId,
+                following: followData.followingId,
+            })
+            if (followFound) {
+                throw new ConflictException('You already follow this user')
+            }
+
             const newFollow = new this.followerModel({
                 follower: followData.followerId,
                 following: followData.followingId,

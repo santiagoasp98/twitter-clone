@@ -23,7 +23,7 @@ import tweetLike from '../assets/tweet-like.svg'
 import tweetStats from '../assets/tweet-stats.svg'
 
 import moment from 'moment'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { deleteTweetRequest, updateTweetRequest } from '../api/tweets'
 import { useAuth } from '../hooks/useAuth'
 
@@ -34,7 +34,7 @@ interface TweetCardProps {
 }
 
 const iconSize = 18
-const randomViews = Math.floor(Math.random() * 500) + 1
+// const randomViews = Math.floor(Math.random() * 500) + 1
 
 export const TweetCard: React.FC<TweetCardProps> = ({
   tweet,
@@ -47,6 +47,13 @@ export const TweetCard: React.FC<TweetCardProps> = ({
 
   const [editingTweet, setEditingTweet] = useState(false)
   const [newTweetContent, setNewTweetContent] = useState(tweet.content)
+
+  const [randomViews, setRandomViews] = useState(
+    Math.floor(Math.random() * 500) + 1,
+  ) // :p
+  useEffect(() => {
+    setRandomViews(Math.floor(Math.random() * 500) + 1)
+  }, [])
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -70,7 +77,6 @@ export const TweetCard: React.FC<TweetCardProps> = ({
 
   const handleDeleteTweet = async () => {
     try {
-      console.log(tweet._id)
       await deleteTweetRequest(tweet._id, token)
       setAnchorEl(null)
       await refetch()

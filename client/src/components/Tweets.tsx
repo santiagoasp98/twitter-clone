@@ -1,52 +1,11 @@
-import { useCallback, useEffect, useState } from 'react'
-import { Tweet } from '../types/tweet'
-import { Box, CircularProgress } from '@mui/material'
-import { getTweetsByUsernameRequest } from '../api/tweets'
-import { User } from '../types/auth'
+import { Box, CircularProgress, Typography } from '@mui/material'
 import { TweetCard } from './TweetCard'
-import { useParams } from 'react-router-dom'
+import { useTweets } from '../hooks/useTweets'
 import { useAuth } from '../hooks/useAuth'
 
 export const Tweets: React.FC = () => {
-  const [user, setUser] = useState<User | null>(null)
-  const [tweets, setTweets] = useState<Tweet[]>([])
-  const [loadingTweets, setLoadingTweets] = useState(true)
-
-  const { getUserByUsername } = useAuth()
-  const { username } = useParams()
-
-  const fetchUser = useCallback(async () => {
-    if (username) {
-      try {
-        const user = await getUserByUsername(username)
-        setUser(user)
-      } catch (err) {
-        console.log('Error getting the user: ', err)
-      }
-    }
-  }, [username, getUserByUsername])
-
-  useEffect(() => {
-    fetchUser()
-  }, [fetchUser])
-
-  const fetchTweets = async () => {
-    try {
-      if (user) {
-        const res = await getTweetsByUsernameRequest(user.username)
-        setTweets(res.data)
-        setLoadingTweets(false)
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  useEffect(() => {
-    setLoadingTweets(true)
-    fetchTweets()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user])
+  const { user } = useAuth()
+  const { tweets, fetchTweets, loadingTweets } = useTweets()
 
   return (
     <>
@@ -64,13 +23,28 @@ export const Tweets: React.FC = () => {
         </Box>
       ) : (
         user &&
-        tweets.map((tweet) => (
-          <TweetCard
-            key={tweet._id}
-            tweet={tweet}
-            user={user}
-            refetch={fetchTweets}
-          />
+        (tweets.length > 0 ? (
+          tweets.map((tweet) => (
+            <TweetCard
+              key={tweet._id}
+              tweet={tweet}
+              user={user}
+              refetch={fetchTweets}
+            />
+          ))
+        ) : (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              m: 2,
+            }}
+          >
+            <Typography variant="h5" style={{ fontWeight: 'bold' }}>
+              This account has no tweets
+            </Typography>
+          </Box>
         ))
       )}
     </>

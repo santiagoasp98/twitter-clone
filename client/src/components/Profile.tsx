@@ -198,8 +198,11 @@ export const Profile: React.FC = () => {
             </Typography>
             <Typography
               gutterBottom
-              variant="h6"
-              sx={{ color: (theme: Theme) => theme.myPalette.greyFont }}
+              variant="body1"
+              sx={{
+                color: (theme: Theme) => theme.myPalette.greyFont,
+                fontSize: '1em',
+              }}
             >
               @{user?.username}
             </Typography>

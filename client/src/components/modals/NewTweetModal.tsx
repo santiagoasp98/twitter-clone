@@ -28,6 +28,7 @@ import { createTweetRequest } from '../../api/tweets'
 import { CreateTweet } from '../../types/tweet'
 import { useAuth } from '../../hooks/useAuth'
 import { AxiosError } from 'axios'
+import { useTweets } from '../../hooks/useTweets'
 
 interface NewTweetModalProps {
   author: string
@@ -44,6 +45,7 @@ export const NewTweetModal: React.FC<NewTweetModalProps> = ({
   close,
 }) => {
   const { token } = useAuth()
+  const { fetchTweets } = useTweets()
 
   const [tweetContent, setTweetContent] = useState('')
 
@@ -65,6 +67,7 @@ export const NewTweetModal: React.FC<NewTweetModalProps> = ({
     }
     try {
       await createTweetRequest(tweetData, token)
+      await fetchTweets()
       close()
       setTweetContent('')
     } catch (error) {

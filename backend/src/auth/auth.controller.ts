@@ -25,7 +25,7 @@ export class AuthController {
     }
 
     @UseGuards(AuthGuard)
-    @Get()
+    @Get('/users/:excludedId')
     async getUsers(@Param('excludedId') excludedId: string) {
         return this.authService.getUsers(excludedId)
     }

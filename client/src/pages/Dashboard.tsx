@@ -1,6 +1,7 @@
 import {
   Button,
   Divider,
+  Icon,
   MenuList,
   Theme,
   Typography,
@@ -29,6 +30,7 @@ import { SuggestUsers } from '../components/SuggestUsers'
 import { Trends } from '../components/Trends'
 import { useState } from 'react'
 import { NewTweetModal } from '../components/modals/NewTweetModal'
+import { TweetsProvider } from '../context/TweetsContext'
 
 const StyledGrid = styled(Grid)(() => ({
   height: '100vh',
@@ -67,18 +69,49 @@ export const Dashboard: React.FC = () => {
           >
             <Grid item xs={4}></Grid>
             <Grid item xs={8}>
-              <MenuList>
-                <Item item="" icon={TwitterLogo} height={35} width={35} />
+              <Icon
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  overflow: 'visible',
+                  mt: 1,
+                  ml: '8px',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.2s',
+                  borderRadius: '50%',
+                  width: '50px',
+                  height: '50px',
+                  ':hover': {
+                    backgroundColor: (theme: Theme) =>
+                      theme.myPalette.greyShadow,
+                  },
+                }}
+              >
+                <img src={TwitterLogo} height={45} width={45} />
+              </Icon>
+              <MenuList sx={{ pt: 0 }}>
                 <Item item="Home" icon={MenuHome} param="/home" />
-                <Item item="Explore" icon={MenuExplore} param="/explore" />
-                <Item item="Notifications" icon={MenuNotifications} />
+                <Item
+                  item="Explore"
+                  icon={MenuExplore}
+                  param="/explore"
+                  height={22}
+                  width={22}
+                />
+                <Item
+                  item="Notifications"
+                  icon={MenuNotifications}
+                  height={30}
+                  width={30}
+                />
                 <Item item="Messages" icon={MenuMessages} param="/messages" />
                 <Item item="Lists" icon={MenuLists} />
                 <Item
                   item="Bookmarks"
                   icon={MenuSaved}
-                  height={30}
-                  width={30}
+                  height={25}
+                  width={25}
                 />
                 <Item
                   item="Profile"
@@ -126,7 +159,21 @@ export const Dashboard: React.FC = () => {
         >
           {/* Main */}
           <Routes>
-            <Route path="/:username" element={<Profile />} />
+            <Route
+              path="/:username"
+              element={
+                <TweetsProvider>
+                  <Profile />
+                  {user && (
+                    <NewTweetModal
+                      author={user.id}
+                      visible={visibleNewTweet}
+                      close={() => setVisibleNewTweet(false)}
+                    />
+                  )}
+                </TweetsProvider>
+              }
+            />
             <Route path="/messages" element={<Messages />} />
             <Route path="/explore" element={<Explore />} />
             <Route path="/home" element={<Feed />} />
@@ -180,13 +227,6 @@ export const Dashboard: React.FC = () => {
           </Grid>
         </StyledColumn>
       </StyledGrid>
-      {user && (
-        <NewTweetModal
-          author={user.id}
-          visible={visibleNewTweet}
-          close={() => setVisibleNewTweet(false)}
-        />
-      )}
     </>
   )
 }

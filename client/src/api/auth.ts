@@ -1,25 +1,27 @@
 import { CreateUserDto, UserLoginDto, UserUpdateDto } from '../types/auth'
 import axiosInstance from './axios'
 
+const BASE_URL = '/auth'
+
 export const getUserRequest = (username: string) =>
-  axiosInstance.get(`/auth/${username}`)
+  axiosInstance.get(`${BASE_URL}/${username}`)
 
 export const getUsersRequest = (excludedId: string, access_token: string) =>
-  axiosInstance.get(`/auth?excludedId=${excludedId}`, {
+  axiosInstance.get(`${BASE_URL}/users/${excludedId}`, {
     headers: {
       Authorization: `Bearer ${access_token}`,
     },
   })
 
 export const registerRequest = (newUser: CreateUserDto) =>
-  axiosInstance.post('/auth/register', newUser)
+  axiosInstance.post(`${BASE_URL}/register`, newUser)
 
 export const loginRequest = (userData: UserLoginDto) =>
-  axiosInstance.post('/auth/login', userData)
+  axiosInstance.post(`${BASE_URL}/login`, userData)
 
 export const logoutRequest = (access_token: string) =>
   axiosInstance.post(
-    '/auth/logout',
+    `${BASE_URL}/logout`,
     {},
     {
       headers: {
@@ -33,13 +35,13 @@ export const updateUserRequest = (
   userData: UserUpdateDto,
   access_token: string,
 ) =>
-  axiosInstance.patch(`/auth/${id}`, userData, {
+  axiosInstance.patch(`${BASE_URL}/${id}`, userData, {
     headers: { Authorization: `Bearer ${access_token}` },
   })
 
 export const verifyTokenRequest = (access_token: string) =>
   axiosInstance.post(
-    '/auth/verify',
+    `${BASE_URL}/verify`,
     {},
     {
       headers: {

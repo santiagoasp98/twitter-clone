@@ -1,4 +1,4 @@
-import { Box, Icon, MenuItem, Theme, Typography } from '@mui/material'
+import { Box, Grid, Icon, MenuItem, Theme, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
 interface MenuItemProps {
@@ -30,12 +30,31 @@ export const Item: React.FC<MenuItemProps> = ({
       }}
       onClick={() => param && navigate(`${param}`)}
     >
-      <Box display="flex" alignItems="flex-start">
-        <Icon sx={{ mr: 2.5, overflow: 'visible' }}>
-          <img src={icon} height={height} width={width} />
-        </Icon>
-        <Typography variant="h6">{item}</Typography>
-      </Box>
+      <Grid container alignItems="center">
+        <Grid item xs={2.5}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+            }}
+          >
+            <Icon
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                overflow: 'visible',
+                height: 'auto',
+              }}
+            >
+              <img src={icon} height={height} width={width} />
+            </Icon>
+          </Box>
+        </Grid>
+        <Grid item xs={8.5}>
+          <Typography variant="h6">{item}</Typography>
+        </Grid>
+      </Grid>
     </MenuItem>
   )
 }
