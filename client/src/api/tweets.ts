@@ -38,3 +38,8 @@ export const unlikeTweetRequest = (tweetId: string, token: string) =>
     {},
     { headers: { Authorization: `Bearer ${token}` } },
   )
+
+export const getFeedForUserRequest = (userId: string, token: string) =>
+  axiosInstance.get(`${BASE_URL}/feed/${userId}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })

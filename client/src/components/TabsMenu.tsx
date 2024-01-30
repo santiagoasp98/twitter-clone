@@ -1,6 +1,7 @@
-import { Box, Tab, Tabs, Theme } from '@mui/material'
+import { Box, Tab, Tabs, Theme, Typography } from '@mui/material'
 import { useState } from 'react'
 import { Tweets } from './Tweets'
+import { useTweets } from '../hooks/useTweets'
 
 interface TabsMenuProps {
   children?: React.ReactNode
@@ -47,6 +48,8 @@ export const TabsMenu: React.FC = () => {
     setValue(newValue)
   }
 
+  const { tweets, loadingTweets } = useTweets()
+
   return (
     <>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -56,27 +59,30 @@ export const TabsMenu: React.FC = () => {
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <Tab sx={tabStyle} label="Posts" {...a11yProps(0)} />
-          <Tab sx={tabStyle} label="Replies" {...a11yProps(1)} />
-          <Tab sx={tabStyle} label="Highlights" {...a11yProps(2)} />
-          <Tab sx={tabStyle} label="Media" {...a11yProps(3)} />
-          <Tab sx={tabStyle} label="Likes" {...a11yProps(4)} />
+          <Tab sx={tabStyle} label="Tweets" {...a11yProps(0)} />
+          <Tab sx={tabStyle} label="Replies" {...a11yProps(1)} disabled />
+          <Tab sx={tabStyle} label="Highlights" {...a11yProps(2)} disabled />
+          <Tab sx={tabStyle} label="Media" {...a11yProps(3)} disabled />
+          <Tab sx={tabStyle} label="Likes" {...a11yProps(4)} disabled />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <Tweets />
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-        Replies :p
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
-        Highlights :p
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={3}>
-        Media :p
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={4}>
-        Likes
+        {tweets.length > 0 ? (
+          <Tweets tweets={tweets} loadingTweets={loadingTweets} />
+        ) : (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              m: 2,
+            }}
+          >
+            <Typography variant="h5" style={{ fontWeight: 'bold' }}>
+              This account has no tweets.
+            </Typography>
+          </Box>
+        )}
       </CustomTabPanel>
     </>
   )

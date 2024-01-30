@@ -1,10 +1,12 @@
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { Box, CircularProgress } from '@mui/material'
 import { TweetCard } from './TweetCard'
-import { useTweets } from '../hooks/useTweets'
+import { Tweet } from '../types/tweet'
 
-export const Tweets: React.FC = () => {
-  const { tweets, fetchTweets, loadingTweets } = useTweets()
-
+interface TweetsProps {
+  tweets: Tweet[]
+  loadingTweets: boolean
+}
+export const Tweets: React.FC<TweetsProps> = ({ tweets, loadingTweets }) => {
   return (
     <>
       {loadingTweets ? (
@@ -19,23 +21,8 @@ export const Tweets: React.FC = () => {
         >
           <CircularProgress />
         </Box>
-      ) : tweets.length > 0 ? (
-        tweets.map((tweet) => (
-          <TweetCard key={tweet._id} tweet={tweet} refetch={fetchTweets} />
-        ))
       ) : (
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            m: 2,
-          }}
-        >
-          <Typography variant="h5" style={{ fontWeight: 'bold' }}>
-            This account has no tweets
-          </Typography>
-        </Box>
+        tweets.map((tweet) => <TweetCard key={tweet._id} tweet={tweet} />)
       )}
     </>
   )

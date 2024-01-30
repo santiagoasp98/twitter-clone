@@ -26,18 +26,18 @@ import { useEffect, useState } from 'react'
 import { deleteTweetRequest, updateTweetRequest } from '../api/tweets'
 import { useAuth } from '../hooks/useAuth'
 import { useTweets } from '../hooks/useTweets'
+import { useNavigate } from 'react-router-dom'
 
 interface TweetCardProps {
   tweet: Tweet
-  refetch: () => Promise<void>
 }
 
 const iconSize = 18
-// const randomViews = Math.floor(Math.random() * 500) + 1
 
-export const TweetCard: React.FC<TweetCardProps> = ({ tweet, refetch }) => {
-  const { token } = useAuth()
-  const { isTweetsOwner } = useTweets()
+export const TweetCard: React.FC<TweetCardProps> = ({ tweet }) => {
+  const { user: loggedInUser, token } = useAuth()
+  const { fetchTweets: reFetchTweets } = useTweets()
+  const navigate = useNavigate()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
@@ -75,7 +75,7 @@ export const TweetCard: React.FC<TweetCardProps> = ({ tweet, refetch }) => {
     try {
       await deleteTweetRequest(tweet._id, token)
       setAnchorEl(null)
-      await refetch()
+      await reFetchTweets()
     } catch (error) {
       console.log(error)
     }
@@ -112,7 +112,15 @@ export const TweetCard: React.FC<TweetCardProps> = ({ tweet, refetch }) => {
               flexDirection: 'row',
             }}
           >
-            <Typography variant="body1" sx={{ whiteSpace: 'nowrap' }}>
+            <Typography
+              onClick={() => navigate(`/${tweet.author.username}`)}
+              variant="body1"
+              sx={{
+                whiteSpace: 'nowrap',
+                fontWeight: 'bold',
+                '&:hover': { cursor: 'pointer', textDecoration: 'underline' },
+              }}
+            >
               {tweet.author.fullname}
             </Typography>
             <Typography
@@ -135,7 +143,7 @@ export const TweetCard: React.FC<TweetCardProps> = ({ tweet, refetch }) => {
             </Typography>
           </Box>
           {/* options */}
-          {isTweetsOwner && (
+          {loggedInUser?.username === tweet.author.username && (
             <>
               <IconButton onClick={handleClick}>
                 <MoreHorizIcon />

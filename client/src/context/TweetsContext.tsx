@@ -15,7 +15,6 @@ import { getTweetsFromUser } from '../api/tweets'
 interface TweetsContextType {
   tweets: Tweet[]
   loadingTweets: boolean
-  isTweetsOwner: boolean
   fetchTweets: () => Promise<void>
 }
 
@@ -30,12 +29,11 @@ export const TweetsContext = createContext<TweetsContextType | undefined>(
 export const TweetsProvider: React.FC<TweetsContextProps> = ({ children }) => {
   const [tweetsOwner, setTweetsOwner] = useState<User | null>(null)
   const { username } = useParams()
-  const { user: loggedInUser, getUserByUsername } = useAuth()
+  const { getUserByUsername } = useAuth()
   const prevUserRef = useRef(tweetsOwner)
 
-  const [tweets, setTweets] = useState([])
+  const [tweets, setTweets] = useState<Tweet[]>([])
   const [loadingTweets, setLoadingTweets] = useState(true)
-  const [isTweetsOwner, setIsTweetsOwner] = useState(false)
 
   const fetchUser = useCallback(async () => {
     if (username) {
@@ -76,16 +74,8 @@ export const TweetsProvider: React.FC<TweetsContextProps> = ({ children }) => {
     prevUserRef.current = tweetsOwner
   }, [fetchTweets, tweetsOwner])
 
-  useEffect(() => {
-    if (loggedInUser && username) {
-      setIsTweetsOwner(loggedInUser.username === username)
-    }
-  }, [loggedInUser, username])
-
   return (
-    <TweetsContext.Provider
-      value={{ tweets, loadingTweets, isTweetsOwner, fetchTweets }}
-    >
+    <TweetsContext.Provider value={{ tweets, loadingTweets, fetchTweets }}>
       {children}
     </TweetsContext.Provider>
   )

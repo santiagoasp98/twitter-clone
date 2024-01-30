@@ -4,7 +4,7 @@ import {
     NotFoundException,
 } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
-import { Model, Types } from 'mongoose'
+import { Model } from 'mongoose'
 import { User } from 'src/schemas/user.schema'
 import { CreateTweetDto, UpdateTweetDto } from './dto/tweet.dto'
 import { Tweet } from 'src/schemas/tweet.schema'
@@ -41,6 +41,10 @@ export class TweetsService {
                     path: 'author',
                     select: '_id username fullname',
                 })
+            userTweets.sort(
+                (t1, t2) => t2.tweetedAt.getTime() - t1.tweetedAt.getTime(),
+            )
+
             return userTweets
         } catch (error) {
             console.log(error)
@@ -61,16 +65,6 @@ export class TweetsService {
                 throw new NotFoundException('Could not find the tweet')
             }
 
-            // Convert tweetId to ObjectId
-            const tweetObjectId = new Types.ObjectId(tweetId)
-
-            // Update content tweet in author's array
-            await this.userModel.updateOne(
-                { _id: updatedTweet.author },
-                { $set: { 'tweets.$[elem].content': tweetData.content } },
-                { arrayFilters: [{ 'elem._id': tweetObjectId }] },
-            )
-
             return updatedTweet
         } catch (error) {
             console.log(error)
@@ -86,15 +80,6 @@ export class TweetsService {
         if (!tweet) {
             throw new NotFoundException('Tweet not found')
         }
-
-        // Convert tweetId to ObjectId
-        const tweetObjectId = new Types.ObjectId(tweetId)
-
-        // Delete tweet from author's array
-        await this.userModel.updateOne(
-            { _id: tweet.author },
-            { $pull: { tweets: { _id: tweetObjectId } } },
-        )
 
         // Delete the tweet
         await this.tweetModel.deleteOne({ _id: tweetId })
@@ -150,9 +135,14 @@ export class TweetsService {
             (userFollowing) => userFollowing.following,
         )
 
-        const tweets = await this.tweetModel.find({
-            author: { $in: followingIds },
-        })
+        const tweets = await this.tweetModel
+            .find({
+                author: { $in: followingIds },
+            })
+            .populate({
+                path: 'author',
+                select: '_id username fullname',
+            })
         tweets.sort((t1, t2) => t2.tweetedAt.getTime() - t1.tweetedAt.getTime())
 
         return tweets

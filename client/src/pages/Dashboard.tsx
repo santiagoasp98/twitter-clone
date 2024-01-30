@@ -91,7 +91,11 @@ export const Dashboard: React.FC = () => {
                 <img src={TwitterLogo} height={45} width={45} />
               </Icon>
               <MenuList sx={{ pt: 0 }}>
-                <Item item="Home" icon={MenuHome} param="/home" />
+                <Item
+                  item="Home"
+                  icon={MenuHome}
+                  param={`/${user?.username}/home`}
+                />
                 <Item
                   item="Explore"
                   icon={MenuExplore}
@@ -176,7 +180,14 @@ export const Dashboard: React.FC = () => {
             />
             <Route path="/messages" element={<Messages />} />
             <Route path="/explore" element={<Explore />} />
-            <Route path="/home" element={<Feed />} />
+            <Route
+              path="/:username/home"
+              element={
+                <TweetsProvider>
+                  <Feed />
+                </TweetsProvider>
+              }
+            />
           </Routes>
         </ScrollableColumn>
 

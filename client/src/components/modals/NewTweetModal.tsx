@@ -125,7 +125,7 @@ export const NewTweetModal: React.FC<NewTweetModalProps> = ({
                 multiline
                 placeholder="What is happening?"
                 rows={3}
-                inputProps={{ maxLength: charsLimit }}
+                inputProps={{ maxLength: charsLimit, spellCheck: 'false' }}
                 value={tweetContent}
                 onChange={(e) => setTweetContent(e.target.value)}
                 sx={{

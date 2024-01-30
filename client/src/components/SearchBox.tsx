@@ -4,6 +4,7 @@ import SearchIcon from '@mui/icons-material/Search'
 export const SearchBox: React.FC = () => {
   return (
     <TextField
+      disabled
       variant="outlined"
       placeholder="Search"
       fullWidth
@@ -25,6 +26,7 @@ export const SearchBox: React.FC = () => {
         marginTop: '5px',
         '& .MuiOutlinedInput-root': {
           '& fieldset': {
+            border: 'none',
             borderColor: (theme: Theme) => theme.myPalette.greyBackground,
           },
           '&:hover fieldset': {

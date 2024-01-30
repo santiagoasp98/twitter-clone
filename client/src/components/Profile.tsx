@@ -22,34 +22,16 @@ import { EditProfileModal } from './modals/EditProfileModal'
 import logoutIcon from '../assets/logout.svg'
 import { useParams } from 'react-router-dom'
 import { User } from '../types/auth'
-import {
-  checkFollowing,
-  handleFollow,
-  handleUnfollow,
-} from '../utils/followersUtils'
+import { FollowerButton } from './utils/FollowerButton'
 
 export const Profile: React.FC = () => {
-  const { user: userLoggedIn, getUserByUsername, logout, token } = useAuth()
+  const { user: userLoggedIn, getUserByUsername, logout } = useAuth()
 
   const { username } = useParams()
 
   const [user, setUser] = useState<User | null>(null)
   const [loadingProfile, setLoadingProfile] = useState(true)
   const [visibleEditProfile, setVisibleEditProfile] = useState(false)
-
-  const [isFollowing, setIsFollowing] = useState(false)
-  const [hover, setHover] = useState(false)
-
-  useEffect(() => {
-    const fetchFollowingStatus = async () => {
-      if (userLoggedIn && user) {
-        const result = await checkFollowing(userLoggedIn, user)
-        setIsFollowing(result)
-      }
-    }
-
-    fetchFollowingStatus()
-  }, [userLoggedIn, user])
 
   const fetchUser = useCallback(async () => {
     if (username) {
@@ -132,7 +114,32 @@ export const Profile: React.FC = () => {
                 >
                   Edit profile
                 </Button>
-                <Box
+                <Icon
+                  onClick={logout}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'white',
+                    position: 'absolute',
+                    bottom: -45,
+                    left: '92%',
+                    borderColor: 'white',
+                    overflow: 'visible',
+                    cursor: 'pointer',
+                    transition: 'background-color 0.2s',
+                    borderRadius: '50%',
+                    width: '40px',
+                    height: '40px',
+                    ':hover': {
+                      backgroundColor: (theme: Theme) =>
+                        theme.myPalette.greyShadow,
+                    },
+                  }}
+                >
+                  <img src={logoutIcon} height={25} width={25} />
+                </Icon>
+                {/* <Box
                   onClick={logout}
                   sx={{
                     color: 'white',
@@ -149,40 +156,10 @@ export const Profile: React.FC = () => {
                   }}
                 >
                   <img src={logoutIcon} height={25} width={25} />
-                </Box>
+                </Box> */}
               </>
             ) : (
-              user && (
-                <Button
-                  onClick={(event) => {
-                    event.stopPropagation()
-                    isFollowing
-                      ? handleUnfollow(user.id, userLoggedIn, token, () =>
-                          setIsFollowing(false),
-                        )
-                      : handleFollow(user.id, userLoggedIn, token, () =>
-                          setIsFollowing(true),
-                        )
-                  }}
-                  onMouseEnter={() => setHover(true)}
-                  onMouseLeave={() => setHover(false)}
-                  variant="contained"
-                  sx={{
-                    position: 'absolute',
-                    bottom: -45,
-                    left: '80%',
-                    color: 'black',
-                    bgcolor: isFollowing ? 'grey' : 'white',
-                    borderRadius: '20px',
-                    mr: 2,
-                    '&:hover': {
-                      bgcolor: isFollowing ? 'grey' : 'white',
-                    },
-                  }}
-                >
-                  {isFollowing ? (hover ? 'Unfollow' : 'Following') : 'Follow'}
-                </Button>
-              )
+              user && <FollowerButton user={user} userLoggedIn={userLoggedIn} />
             )}
           </Box>
 
