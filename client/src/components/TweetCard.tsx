@@ -26,6 +26,7 @@ import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { deleteTweetRequest, updateTweetRequest } from '../api/tweets'
 import { useAuth } from '../hooks/useAuth'
+import { useTweets } from '../hooks/useTweets'
 
 interface TweetCardProps {
   tweet: Tweet
@@ -42,6 +43,7 @@ export const TweetCard: React.FC<TweetCardProps> = ({
   refetch,
 }) => {
   const { token } = useAuth()
+  const { isTweetsOwner } = useTweets()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
@@ -139,33 +141,37 @@ export const TweetCard: React.FC<TweetCardProps> = ({
             </Typography>
           </Box>
           {/* options */}
-          <IconButton onClick={handleClick}>
-            <MoreHorizIcon />
-          </IconButton>
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-            sx={{ borderRadius: '50px' }}
-          >
-            <MenuItem
-              onClick={() => {
-                setAnchorEl(null)
-                setEditingTweet(true)
-              }}
-            >
-              <EditIcon />{' '}
-              <Typography variant="body1" sx={{ ml: 1 }}>
-                Edit tweet
-              </Typography>
-            </MenuItem>
-            <MenuItem onClick={handleDeleteTweet} sx={{ color: 'red' }}>
-              <DeleteIcon />{' '}
-              <Typography variant="body1" sx={{ ml: 1 }}>
-                Delete tweet
-              </Typography>
-            </MenuItem>
-          </Menu>
+          {isTweetsOwner && (
+            <>
+              <IconButton onClick={handleClick}>
+                <MoreHorizIcon />
+              </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+                sx={{ borderRadius: '50px' }}
+              >
+                <MenuItem
+                  onClick={() => {
+                    setAnchorEl(null)
+                    setEditingTweet(true)
+                  }}
+                >
+                  <EditIcon />{' '}
+                  <Typography variant="body1" sx={{ ml: 1 }}>
+                    Edit tweet
+                  </Typography>
+                </MenuItem>
+                <MenuItem onClick={handleDeleteTweet} sx={{ color: 'red' }}>
+                  <DeleteIcon />{' '}
+                  <Typography variant="body1" sx={{ ml: 1 }}>
+                    Delete tweet
+                  </Typography>
+                </MenuItem>
+              </Menu>
+            </>
+          )}
         </Box>
         {/* content or editing */}
         {editingTweet ? (

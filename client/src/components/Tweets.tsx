@@ -1,11 +1,9 @@
 import { Box, CircularProgress, Typography } from '@mui/material'
 import { TweetCard } from './TweetCard'
 import { useTweets } from '../hooks/useTweets'
-import { useAuth } from '../hooks/useAuth'
 
 export const Tweets: React.FC = () => {
-  const { user } = useAuth()
-  const { tweets, fetchTweets, loadingTweets } = useTweets()
+  const { tweets, tweetsOwner, fetchTweets, loadingTweets } = useTweets()
 
   return (
     <>
@@ -22,13 +20,13 @@ export const Tweets: React.FC = () => {
           <CircularProgress />
         </Box>
       ) : (
-        user &&
+        tweetsOwner &&
         (tweets.length > 0 ? (
           tweets.map((tweet) => (
             <TweetCard
               key={tweet._id}
               tweet={tweet}
-              user={user}
+              user={tweetsOwner}
               refetch={fetchTweets}
             />
           ))
