@@ -14,7 +14,6 @@ import DeleteIcon from '@mui/icons-material/Delete'
 
 import { Tweet, UpdateTweet } from '../types/tweet'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
-import { User } from '../types/auth'
 
 import profilePic from '../assets/profile-picture.jpeg'
 import tweetComment from '../assets/tweet-comment.svg'
@@ -30,18 +29,13 @@ import { useTweets } from '../hooks/useTweets'
 
 interface TweetCardProps {
   tweet: Tweet
-  user: User
   refetch: () => Promise<void>
 }
 
 const iconSize = 18
 // const randomViews = Math.floor(Math.random() * 500) + 1
 
-export const TweetCard: React.FC<TweetCardProps> = ({
-  tweet,
-  user,
-  refetch,
-}) => {
+export const TweetCard: React.FC<TweetCardProps> = ({ tweet, refetch }) => {
   const { token } = useAuth()
   const { isTweetsOwner } = useTweets()
 
@@ -119,7 +113,7 @@ export const TweetCard: React.FC<TweetCardProps> = ({
             }}
           >
             <Typography variant="body1" sx={{ whiteSpace: 'nowrap' }}>
-              {user.fullname}
+              {tweet.author.fullname}
             </Typography>
             <Typography
               variant="body2"
@@ -128,7 +122,7 @@ export const TweetCard: React.FC<TweetCardProps> = ({
                 ml: 1,
               }}
             >
-              @{user.username}
+              @{tweet.author.username}
             </Typography>
             <Typography
               variant="body2"

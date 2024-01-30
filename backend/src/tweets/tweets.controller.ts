@@ -21,9 +21,9 @@ export class TweetsController {
         return this.tweetsService.createTweet(tweetData)
     }
 
-    @Get(':username')
-    async getAllTweetsByUsername(@Param('username') username: string) {
-        return this.tweetsService.getAllTweetsByUsername(username)
+    @Get(':userId')
+    async getTweetsFromUser(@Param('userId') userId: string) {
+        return this.tweetsService.getTweetsFromUser(userId)
     }
 
     @UseGuards(AuthGuard)
@@ -51,5 +51,11 @@ export class TweetsController {
     @Post('/unlike/:id')
     async unlikeTweet(@Param('id') tweetId: string) {
         return this.tweetsService.unlikeTweet(tweetId)
+    }
+
+    @UseGuards(AuthGuard)
+    @Get('/feed/:userId')
+    async getFeedForUser(@Param('userId') userId: string) {
+        return this.tweetsService.getFeedForUser(userId)
     }
 }

@@ -3,7 +3,7 @@ import { TweetCard } from './TweetCard'
 import { useTweets } from '../hooks/useTweets'
 
 export const Tweets: React.FC = () => {
-  const { tweets, tweetsOwner, fetchTweets, loadingTweets } = useTweets()
+  const { tweets, fetchTweets, loadingTweets } = useTweets()
 
   return (
     <>
@@ -19,31 +19,23 @@ export const Tweets: React.FC = () => {
         >
           <CircularProgress />
         </Box>
-      ) : (
-        tweetsOwner &&
-        (tweets.length > 0 ? (
-          tweets.map((tweet) => (
-            <TweetCard
-              key={tweet._id}
-              tweet={tweet}
-              user={tweetsOwner}
-              refetch={fetchTweets}
-            />
-          ))
-        ) : (
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              m: 2,
-            }}
-          >
-            <Typography variant="h5" style={{ fontWeight: 'bold' }}>
-              This account has no tweets
-            </Typography>
-          </Box>
+      ) : tweets.length > 0 ? (
+        tweets.map((tweet) => (
+          <TweetCard key={tweet._id} tweet={tweet} refetch={fetchTweets} />
         ))
+      ) : (
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            m: 2,
+          }}
+        >
+          <Typography variant="h5" style={{ fontWeight: 'bold' }}>
+            This account has no tweets
+          </Typography>
+        </Box>
       )}
     </>
   )

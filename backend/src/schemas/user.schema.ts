@@ -1,6 +1,4 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Types } from 'mongoose'
-import { Tweet } from './tweet.schema'
 
 @Schema({
     timestamps: true,
@@ -45,9 +43,6 @@ export class User {
 
     @Prop()
     profilePicture: string
-
-    @Prop({ type: [{ type: Types.ObjectId, ref: 'Tweet' }] })
-    tweets: Tweet[]
 
     createdAt: Date
 }

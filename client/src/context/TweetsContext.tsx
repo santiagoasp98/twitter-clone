@@ -10,11 +10,10 @@ import { Tweet } from '../types/tweet'
 import { User } from '../types/auth'
 import { useParams } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
-import { getTweetsByUsernameRequest } from '../api/tweets'
+import { getTweetsFromUser } from '../api/tweets'
 
 interface TweetsContextType {
   tweets: Tweet[]
-  tweetsOwner: User | null
   loadingTweets: boolean
   isTweetsOwner: boolean
   fetchTweets: () => Promise<void>
@@ -30,9 +29,9 @@ export const TweetsContext = createContext<TweetsContextType | undefined>(
 
 export const TweetsProvider: React.FC<TweetsContextProps> = ({ children }) => {
   const [tweetsOwner, setTweetsOwner] = useState<User | null>(null)
-
   const { username } = useParams()
   const { user: loggedInUser, getUserByUsername } = useAuth()
+  const prevUserRef = useRef(tweetsOwner)
 
   const [tweets, setTweets] = useState([])
   const [loadingTweets, setLoadingTweets] = useState(true)
@@ -42,8 +41,7 @@ export const TweetsProvider: React.FC<TweetsContextProps> = ({ children }) => {
     if (username) {
       setLoadingTweets(true)
       try {
-        const tweetsOwner = await getUserByUsername(username)
-        setTweetsOwner(tweetsOwner)
+        setTweetsOwner(await getUserByUsername(username))
       } catch (err) {
         console.log('Error getting the user: ', err)
       } finally {
@@ -59,10 +57,9 @@ export const TweetsProvider: React.FC<TweetsContextProps> = ({ children }) => {
   /********************************/
 
   const fetchTweets = useCallback(async () => {
-    // setLoadingTweets(true)
     try {
       if (tweetsOwner) {
-        const res = await getTweetsByUsernameRequest(tweetsOwner.username)
+        const res = await getTweetsFromUser(tweetsOwner.id)
         setTweets(res.data)
       }
     } catch (error) {
@@ -71,8 +68,6 @@ export const TweetsProvider: React.FC<TweetsContextProps> = ({ children }) => {
       setLoadingTweets(false)
     }
   }, [tweetsOwner])
-
-  const prevUserRef = useRef(tweetsOwner)
 
   useEffect(() => {
     if (prevUserRef.current !== tweetsOwner) {
@@ -89,7 +84,7 @@ export const TweetsProvider: React.FC<TweetsContextProps> = ({ children }) => {
 
   return (
     <TweetsContext.Provider
-      value={{ tweets, tweetsOwner, loadingTweets, isTweetsOwner, fetchTweets }}
+      value={{ tweets, loadingTweets, isTweetsOwner, fetchTweets }}
     >
       {children}
     </TweetsContext.Provider>

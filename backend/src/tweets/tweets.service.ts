@@ -8,12 +8,14 @@ import { Model, Types } from 'mongoose'
 import { User } from 'src/schemas/user.schema'
 import { CreateTweetDto, UpdateTweetDto } from './dto/tweet.dto'
 import { Tweet } from 'src/schemas/tweet.schema'
+import { Follower } from 'src/schemas/follower.schema'
 
 @Injectable()
 export class TweetsService {
     constructor(
         @InjectModel(Tweet.name) private tweetModel: Model<Tweet>,
         @InjectModel(User.name) private userModel: Model<User>,
+        @InjectModel(Follower.name) private followerModel: Model<Follower>,
     ) {}
 
     async createTweet(tweetData: CreateTweetDto) {
@@ -22,35 +24,24 @@ export class TweetsService {
                 content: tweetData.content,
                 author: tweetData.author,
             })
+            await newTweet.save()
 
-            // find the author to add the tweet
-            const author = await this.userModel.findById(tweetData.author)
-            if (!author) {
-                throw new NotFoundException('Author not found')
-            }
-
-            const savedTweet = await newTweet.save()
-            author.tweets.push(savedTweet)
-            await author.save()
-
-            return savedTweet
+            return { message: 'Tweet successfully created' }
         } catch (error) {
             console.log(error)
             throw new InternalServerErrorException('Could not create the tweet')
         }
     }
 
-    async getAllTweetsByUsername(username: string) {
+    async getTweetsFromUser(userId: string) {
         try {
-            const userFound = await this.userModel.findOne({
-                username: username,
-            })
-            if (!userFound) {
-                throw new NotFoundException('Could not find the user')
-            }
-            return userFound.tweets.sort(
-                (t1, t2) => t2.tweetedAt.getTime() - t1.tweetedAt.getTime(),
-            )
+            const userTweets = await this.tweetModel
+                .find({ author: userId })
+                .populate({
+                    path: 'author',
+                    select: '_id username fullname',
+                })
+            return userTweets
         } catch (error) {
             console.log(error)
             throw new InternalServerErrorException(
@@ -149,5 +140,21 @@ export class TweetsService {
                 'An error occurred unliking the tweet',
             )
         }
+    }
+
+    async getFeedForUser(userId: string): Promise<Tweet[]> {
+        const following: Follower[] = await this.followerModel.find({
+            follower: userId,
+        })
+        const followingIds = following.map(
+            (userFollowing) => userFollowing.following,
+        )
+
+        const tweets = await this.tweetModel.find({
+            author: { $in: followingIds },
+        })
+        tweets.sort((t1, t2) => t2.tweetedAt.getTime() - t1.tweetedAt.getTime())
+
+        return tweets
     }
 }

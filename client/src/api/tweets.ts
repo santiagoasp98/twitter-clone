@@ -8,8 +8,8 @@ export const createTweetRequest = (tweetData: CreateTweet, token: string) =>
     headers: { Authorization: `Bearer ${token}` },
   })
 
-export const getTweetsByUsernameRequest = (username: string) =>
-  axiosInstance.get(`${BASE_URL}/${username}`)
+export const getTweetsFromUser = (userId: string) =>
+  axiosInstance.get(`${BASE_URL}/${userId}`)
 
 export const updateTweetRequest = (
   tweetId: string,

@@ -1,7 +1,9 @@
+import { User } from './auth'
+
 export interface Tweet {
   _id: string
   content: string
-  author: string
+  author: User
   tweetedAt: string
   likesCount: number
 }
