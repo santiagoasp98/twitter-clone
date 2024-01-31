@@ -57,4 +57,4 @@ Now you should be able to access the application at `http://localhost:5173`.
 
 Santiago Silveira - santiago.asp.98@gmail.com
 
-Project Link: [https://github.com/yourusername/twitter-clone](https://github.com/santiagoasp98/twitter-clone)
+Project Link: [https://github.com/santiagoasp98/twitter-clone](https://github.com/santiagoasp98/twitter-clone)
