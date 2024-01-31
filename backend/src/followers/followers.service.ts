@@ -47,11 +47,19 @@ export class FollowersService {
 
     async getFollowers(userId: string): Promise<User[]> {
         try {
-            const followers: Follower[] = await this.followerModel.find({
-                following: userId,
-            })
-            const followersIds = followers.map((follower) => follower.follower)
-            return this.userModel.find({ _id: { $in: followersIds } })
+            const followers: Follower[] = await this.followerModel
+                .find({
+                    following: userId,
+                })
+                .populate({
+                    path: 'follower',
+                    select: '_id username fullname bio',
+                })
+
+            // Map over the followers array and extract the populated user data
+            const users: User[] = followers.map((follower) => follower.follower)
+
+            return users
         } catch (error) {
             throw new NotFoundException('Failed to get followers')
         }
@@ -59,13 +67,20 @@ export class FollowersService {
 
     async getFollowing(userId: string): Promise<User[]> {
         try {
-            const following: Follower[] = await this.followerModel.find({
-                follower: userId,
-            })
-            const followingIds = following.map(
-                (userFollowing) => userFollowing.following,
+            const following: Follower[] = await this.followerModel
+                .find({
+                    follower: userId,
+                })
+                .populate({
+                    path: 'following',
+                    select: '_id username fullname bio',
+                })
+
+            const users: User[] = following.map(
+                (followingUser) => followingUser.following,
             )
-            return this.userModel.find({ _id: { $in: followingIds } })
+
+            return users
         } catch (error) {
             throw new NotFoundException('Failed to get following')
         }

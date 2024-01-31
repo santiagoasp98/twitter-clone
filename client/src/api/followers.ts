@@ -1,16 +1,16 @@
-import { Follower } from '@myTypes/follower'
+import { Follow } from '@myTypes/follower'
 import axiosInstance from '@api/axios'
 
 const BASE_URL = '/followers'
 
-export const followUserRequest = (followData: Follower, token: string) =>
+export const followUserRequest = (followData: Follow, token: string) =>
   axiosInstance.post(`${BASE_URL}/follow`, followData, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   })
 
-export const unfollowUserRequest = (unfollowData: Follower, token: string) =>
+export const unfollowUserRequest = (unfollowData: Follow, token: string) =>
   axiosInstance.post(`${BASE_URL}/unfollow`, unfollowData, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -31,5 +31,5 @@ export const getFollowingRequest = (userId: string, token: string) =>
     },
   })
 
-export const isFollowingRequest = (followData: Follower) =>
+export const isFollowingRequest = (followData: Follow) =>
   axiosInstance.post(`${BASE_URL}/isFollowing`, followData)

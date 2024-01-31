@@ -3,17 +3,23 @@ import { User } from '@myTypes/auth'
 
 import profilePic from '@assets/profile-picture.jpeg'
 import { useNavigate } from 'react-router-dom'
+import { UserFollow } from '@myTypes/follower'
 
 interface UserCardProps {
-  user: User
+  user: User | UserFollow
+  withBio?: boolean
+  close?: () => void
 }
 
-export const UserCard: React.FC<UserCardProps> = ({ user }) => {
+export const UserCard: React.FC<UserCardProps> = ({ user, withBio, close }) => {
   const navigate = useNavigate()
 
   return (
     <Box
       onClick={() => {
+        if (close) {
+          close()
+        }
         navigate(`/${user.username}`)
       }}
       sx={{
@@ -24,6 +30,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user }) => {
         height: '60px',
         marginBottom: '10px',
         flex: 1,
+        p: 1,
         '&:hover': {
           cursor: 'pointer',
           bgcolor: (theme: Theme) => theme.myPalette.darkGreyShadow,
@@ -34,7 +41,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user }) => {
       <Box
         sx={{
           display: 'flex',
-          alignItems: 'center',
+          alignItems: 'flex-start',
           justifyContent: 'flex-start',
         }}
       >
@@ -55,6 +62,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user }) => {
           >
             @{user.username}
           </Typography>
+          {withBio && <Typography variant="body1">{user.bio}</Typography>}
         </Box>
       </Box>
     </Box>

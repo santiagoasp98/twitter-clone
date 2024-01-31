@@ -22,6 +22,7 @@ import balloon from '@assets/profile-balloon.svg'
 import calendar from '@assets/profile-calendar.svg'
 import logoutIcon from '@assets/logout.svg'
 import { User } from '@myTypes/auth'
+import { FollowListModal } from '@components/modals/FollowListModal'
 
 export const Profile: React.FC = () => {
   const { user: userLoggedIn, getUserByUsername, logout } = useAuth()
@@ -31,6 +32,9 @@ export const Profile: React.FC = () => {
   const [user, setUser] = useState<User | null>(null)
   const [loadingProfile, setLoadingProfile] = useState(true)
   const [visibleEditProfile, setVisibleEditProfile] = useState(false)
+
+  const [openFollowList, setOpenFollowList] = useState(false)
+  const [followType, setFollowType] = useState('')
 
   const fetchUser = useCallback(async () => {
     if (username) {
@@ -138,24 +142,6 @@ export const Profile: React.FC = () => {
                 >
                   <img src={logoutIcon} height={25} width={25} />
                 </Icon>
-                {/* <Box
-                  onClick={logout}
-                  sx={{
-                    color: 'white',
-                    position: 'absolute',
-                    bottom: -45,
-                    left: '94%',
-                    borderColor: 'white',
-                    borderRadius: '20px',
-                    '&:hover': {
-                      bgcolor: (theme: Theme) => theme.myPalette.greyShadow,
-                      borderColor: 'white',
-                      cursor: 'pointer',
-                    },
-                  }}
-                >
-                  <img src={logoutIcon} height={25} width={25} />
-                </Box> */}
               </>
             ) : (
               user && <FollowerButton user={user} userLoggedIn={userLoggedIn} />
@@ -227,6 +213,10 @@ export const Profile: React.FC = () => {
               }}
             >
               <Link
+                onClick={() => {
+                  setFollowType('Following')
+                  setOpenFollowList(true)
+                }}
                 underline="none"
                 sx={{
                   display: 'flex',
@@ -248,6 +238,10 @@ export const Profile: React.FC = () => {
               </Link>
 
               <Link
+                onClick={() => {
+                  setFollowType('Followers')
+                  setOpenFollowList(true)
+                }}
                 underline="none"
                 sx={{
                   display: 'flex',
@@ -278,6 +272,14 @@ export const Profile: React.FC = () => {
           user={user}
           profilePic={profilePicture}
           banner={profileBanner}
+        />
+      )}
+      {openFollowList && user && (
+        <FollowListModal
+          visible={openFollowList}
+          type={followType}
+          close={() => setOpenFollowList(false)}
+          userId={user.id}
         />
       )}
       <TabsMenu />

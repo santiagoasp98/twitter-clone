@@ -4,11 +4,11 @@ import {
   unfollowUserRequest,
 } from '@api/followers'
 import { User } from '@myTypes/auth'
-import { Follower } from '@myTypes/follower'
+import { Follow } from '@myTypes/follower'
 
 export const checkFollowing = async (userLoggedIn: User, user: User) => {
   if (userLoggedIn && user) {
-    const followData: Follower = {
+    const followData: Follow = {
       followerId: userLoggedIn.id,
       followingId: user.id,
     }
@@ -28,7 +28,7 @@ export const handleFollow = async (
   setFollowing: () => void,
 ) => {
   if (userLoggedIn) {
-    const followData: Follower = {
+    const followData: Follow = {
       followerId: userLoggedIn.id,
       followingId: userToFollow,
     }
@@ -48,7 +48,7 @@ export const handleUnfollow = async (
   setIsNotFollowing: () => void,
 ) => {
   if (userLoggedIn) {
-    const unfollowData: Follower = {
+    const unfollowData: Follow = {
       followerId: userLoggedIn.id,
       followingId: userToUnfollow,
     }
