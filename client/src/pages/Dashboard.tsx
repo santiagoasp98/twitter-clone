@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   Button,
   Divider,
@@ -9,28 +10,27 @@ import {
 } from '@mui/material'
 import Grid from '@mui/material/Grid'
 import { Route, Routes } from 'react-router-dom'
-import { Profile } from '../components/Profile'
-import { Messages } from '../components/Messages'
-import { Explore } from '../components/Explore'
-import { Feed } from '../components/Feed'
-import { Item } from '../components/MenuItem'
 
-import TwitterLogo from '../assets/twitter-logo.svg'
-import MenuHome from '../assets/menu-home.svg'
-import MenuExplore from '../assets/menu-explore.svg'
-import MenuNotifications from '../assets/menu-notifications.svg'
-import MenuMessages from '../assets/menu-messages.svg'
-import MenuLists from '../assets/menu-lists.svg'
-import MenuSaved from '../assets/menu-saved.svg'
-import MenuProfile from '../assets/menu-profile.svg'
-import MenuOptions from '../assets/menu-options.svg'
-import { useAuth } from '../hooks/useAuth'
-import { SearchBox } from '../components/SearchBox'
-import { SuggestUsers } from '../components/SuggestUsers'
-import { Trends } from '../components/Trends'
-import { useState } from 'react'
-import { NewTweetModal } from '../components/modals/NewTweetModal'
-import { TweetsProvider } from '../context/TweetsContext'
+import { Profile } from '@components/dashboard/main_column/Profile'
+import { Feed } from '@components/dashboard/main_column/Feed'
+import { Item } from '@components/dashboard/left_column/MenuItem'
+import { SearchBox } from '@components/dashboard/right_column/SearchBox'
+import { SuggestUsers } from '@components/dashboard/right_column/SuggestUsers'
+import { Trends } from '@components/dashboard/right_column/Trends'
+import { NewTweetModal } from '@components/modals/NewTweetModal'
+
+import { TweetsProvider } from '@context/TweetsContext'
+import { useAuth } from '@hooks/useAuth'
+
+import TwitterLogo from '@assets/twitter-logo.svg'
+import MenuHome from '@assets/menu-home.svg'
+import MenuExplore from '@assets/menu-explore.svg'
+import MenuNotifications from '@assets/menu-notifications.svg'
+import MenuMessages from '@assets/menu-messages.svg'
+import MenuLists from '@assets/menu-lists.svg'
+import MenuSaved from '@assets/menu-saved.svg'
+import MenuProfile from '@assets/menu-profile.svg'
+import MenuOptions from '@assets/menu-options.svg'
 
 const StyledGrid = styled(Grid)(() => ({
   height: '100vh',
@@ -99,7 +99,6 @@ export const Dashboard: React.FC = () => {
                 <Item
                   item="Explore"
                   icon={MenuExplore}
-                  param="/explore"
                   height={22}
                   width={22}
                 />
@@ -109,7 +108,7 @@ export const Dashboard: React.FC = () => {
                   height={30}
                   width={30}
                 />
-                <Item item="Messages" icon={MenuMessages} param="/messages" />
+                <Item item="Messages" icon={MenuMessages} />
                 <Item item="Lists" icon={MenuLists} />
                 <Item
                   item="Bookmarks"
@@ -178,8 +177,6 @@ export const Dashboard: React.FC = () => {
                 </TweetsProvider>
               }
             />
-            <Route path="/messages" element={<Messages />} />
-            <Route path="/explore" element={<Explore />} />
             <Route
               path="/:username/home"
               element={

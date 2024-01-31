@@ -1,7 +1,7 @@
-import { Box, Tab, Tabs, Theme, Typography } from '@mui/material'
 import { useState } from 'react'
-import { Tweets } from './Tweets'
-import { useTweets } from '../hooks/useTweets'
+import { Box, Tab, Tabs, Theme, Typography } from '@mui/material'
+import { Tweets } from '@components/tweets/Tweets'
+import { useTweets } from '@hooks/useTweets'
 
 interface TabsMenuProps {
   children?: React.ReactNode

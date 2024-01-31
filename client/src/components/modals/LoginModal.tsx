@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import {
   Alert,
   Avatar,
@@ -13,14 +14,13 @@ import {
   useTheme,
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
-
-import googleLogo from '../../assets/google-logo.svg'
-import { useEffect, useState } from 'react'
-import { UserLoginDto } from '../../types/auth'
-import { useAuth } from '../../hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
-import getModalStyle from '../../utils/modalStyle'
 import { AxiosError } from 'axios'
+
+import googleLogo from '@assets/google-logo.svg'
+import { UserLoginDto } from '@myTypes/auth'
+import { useAuth } from '@hooks/useAuth'
+import getModalStyle from '@utils/modalStyle'
 
 interface LoginModalProps {
   visible: boolean

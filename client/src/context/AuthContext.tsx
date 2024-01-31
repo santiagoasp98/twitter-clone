@@ -1,5 +1,6 @@
 import { ReactNode, createContext, useEffect, useState } from 'react'
-import { CreateUserDto, User, UserLoginDto, UserUpdateDto } from '../types/auth'
+
+import { CreateUserDto, User, UserLoginDto, UserUpdateDto } from '@myTypes/auth'
 import {
   getUserRequest,
   getUsersRequest,
@@ -8,7 +9,7 @@ import {
   registerRequest,
   updateUserRequest,
   verifyTokenRequest,
-} from '../api/auth'
+} from '@api/auth'
 
 import Cookies from 'js-cookie'
 

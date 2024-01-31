@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useState } from 'react'
 import {
   Avatar,
   Box,
@@ -8,21 +9,19 @@ import {
   Theme,
   Typography,
 } from '@mui/material'
-import { useAuth } from '../hooks/useAuth'
-import { TabsMenu } from './TabsMenu'
 import moment from 'moment'
-
-import profilePicture from '../assets/profile-picture.jpeg'
-import profileBanner from '../assets/profile-banner.jpeg'
-import balloon from '../assets/profile-balloon.svg'
-import calendar from '../assets/profile-calendar.svg'
-import { useCallback, useEffect, useState } from 'react'
-import { EditProfileModal } from './modals/EditProfileModal'
-
-import logoutIcon from '../assets/logout.svg'
 import { useParams } from 'react-router-dom'
-import { User } from '../types/auth'
-import { FollowerButton } from './utils/FollowerButton'
+import { useAuth } from '@hooks/useAuth'
+import { TabsMenu } from '@components/dashboard/main_column/TabsMenu'
+import { EditProfileModal } from '@components/modals/EditProfileModal'
+import { FollowerButton } from '@components/utils/FollowerButton'
+
+import profilePicture from '@assets/profile-picture.jpeg'
+import profileBanner from '@assets/profile-banner.jpeg'
+import balloon from '@assets/profile-balloon.svg'
+import calendar from '@assets/profile-calendar.svg'
+import logoutIcon from '@assets/logout.svg'
+import { User } from '@myTypes/auth'
 
 export const Profile: React.FC = () => {
   const { user: userLoggedIn, getUserByUsername, logout } = useAuth()

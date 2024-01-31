@@ -1,6 +1,6 @@
 import { Box, CircularProgress } from '@mui/material'
-import { TweetCard } from './TweetCard'
-import { Tweet } from '../types/tweet'
+import { TweetCard } from '@components/tweets/TweetCard'
+import { Tweet } from '@myTypes/tweet'
 
 interface TweetsProps {
   tweets: Tweet[]

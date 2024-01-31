@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   Box,
   Modal,
@@ -13,22 +14,22 @@ import {
   Snackbar,
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
-
-import profilePic from '../../assets/profile-picture.jpeg'
-import newTweetImage from '../../assets/new-tweet-image.svg'
-import newTweetGif from '../../assets/new-tweet-gif.svg'
-import newTweetPoll from '../../assets/new-tweet-poll.svg'
-import newTweetEmoji from '../../assets/new-tweet-emoji.svg'
-import newTweetSchedule from '../../assets/new-tweet-schedule.svg'
-import newTweetLocation from '../../assets/new-tweet-location.svg'
-import newTweetWorld from '../../assets/new-tweet-world.svg'
-import { useState } from 'react'
-import getModalStyle from '../../utils/modalStyle'
-import { createTweetRequest } from '../../api/tweets'
-import { CreateTweet } from '../../types/tweet'
-import { useAuth } from '../../hooks/useAuth'
 import { AxiosError } from 'axios'
-import { useTweets } from '../../hooks/useTweets'
+
+import getModalStyle from '@utils/modalStyle'
+import { createTweetRequest } from '@api/tweets'
+import { CreateTweet } from '@myTypes/tweet'
+import { useAuth } from '@hooks/useAuth'
+import { useTweets } from '@hooks/useTweets'
+
+import profilePic from '@assets/profile-picture.jpeg'
+import newTweetImage from '@assets/new-tweet-image.svg'
+import newTweetGif from '@assets/new-tweet-gif.svg'
+import newTweetPoll from '@assets/new-tweet-poll.svg'
+import newTweetEmoji from '@assets/new-tweet-emoji.svg'
+import newTweetSchedule from '@assets/new-tweet-schedule.svg'
+import newTweetLocation from '@assets/new-tweet-location.svg'
+import newTweetWorld from '@assets/new-tweet-world.svg'
 
 interface NewTweetModalProps {
   author: string

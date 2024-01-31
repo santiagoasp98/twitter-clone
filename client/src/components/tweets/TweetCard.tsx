@@ -11,21 +11,21 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
-
-import { Tweet, UpdateTweet } from '../types/tweet'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 
-import profilePic from '../assets/profile-picture.jpeg'
-import tweetComment from '../assets/tweet-comment.svg'
-import tweetRetweet from '../assets/tweet-retweet.svg'
-import tweetLike from '../assets/tweet-like.svg'
-import tweetStats from '../assets/tweet-stats.svg'
+import { Tweet, UpdateTweet } from '@myTypes/tweet'
+
+import profilePic from '@assets/profile-picture.jpeg'
+import tweetComment from '@assets/tweet-comment.svg'
+import tweetRetweet from '@assets/tweet-retweet.svg'
+import tweetLike from '@assets/tweet-like.svg'
+import tweetStats from '@assets/tweet-stats.svg'
 
 import moment from 'moment'
 import { useEffect, useState } from 'react'
-import { deleteTweetRequest, updateTweetRequest } from '../api/tweets'
-import { useAuth } from '../hooks/useAuth'
-import { useTweets } from '../hooks/useTweets'
+import { deleteTweetRequest, updateTweetRequest } from '@api/tweets'
+import { useAuth } from '@hooks/useAuth'
+import { useTweets } from '@hooks/useTweets'
 import { useNavigate } from 'react-router-dom'
 
 interface TweetCardProps {

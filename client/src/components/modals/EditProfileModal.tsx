@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { User, UserUpdateDto } from '../../types/auth'
 import {
   Avatar,
   Box,
@@ -12,11 +11,11 @@ import {
   useTheme,
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
-import { useAuth } from '../../hooks/useAuth'
-
-import cameraIcon from '../../assets/profile-camera.svg'
-import { DateFields } from '../utils/DateFields'
-import getModalStyle from '../../utils/modalStyle'
+import { User, UserUpdateDto } from '@myTypes/auth'
+import { useAuth } from '@hooks/useAuth'
+import { DateFields } from '@components/utils/DateFields'
+import getModalStyle from '@utils/modalStyle'
+import cameraIcon from '@assets/profile-camera.svg'
 
 interface EditProfileModalProps {
   visible: boolean

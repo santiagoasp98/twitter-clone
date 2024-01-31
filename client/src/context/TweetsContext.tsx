@@ -6,11 +6,12 @@ import {
   ReactNode,
   useRef,
 } from 'react'
-import { Tweet } from '../types/tweet'
-import { User } from '../types/auth'
 import { useParams } from 'react-router-dom'
-import { useAuth } from '../hooks/useAuth'
-import { getTweetsFromUser } from '../api/tweets'
+
+import { Tweet } from '@myTypes/tweet'
+import { User } from '@myTypes/auth'
+import { useAuth } from '@hooks/useAuth'
+import { getTweetsFromUser } from '@api/tweets'
 
 interface TweetsContextType {
   tweets: Tweet[]

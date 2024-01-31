@@ -1,5 +1,5 @@
-import { CreateTweet, UpdateTweet } from '../types/tweet'
-import axiosInstance from './axios'
+import { CreateTweet, UpdateTweet } from '@myTypes/tweet'
+import axiosInstance from '@api/axios'
 
 const BASE_URL = '/tweets'
 

@@ -1,12 +1,13 @@
+import { useEffect, useState } from 'react'
 import { Button } from '@mui/material'
+
 import {
   checkFollowing,
   handleFollow,
   handleUnfollow,
-} from '../../utils/followersUtils'
-import { User } from '../../types/auth'
-import { useEffect, useState } from 'react'
-import { useAuth } from '../../hooks/useAuth'
+} from '@utils/followersUtils'
+import { User } from '@myTypes/auth'
+import { useAuth } from '@hooks/useAuth'
 
 interface FollowerButtonProps {
   user: User

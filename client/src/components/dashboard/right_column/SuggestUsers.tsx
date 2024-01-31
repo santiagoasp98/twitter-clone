@@ -1,8 +1,8 @@
-import { Box, Theme, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { User } from '../types/auth'
-import { useAuth } from '../hooks/useAuth'
-import { UserCard } from './UserCard'
+import { Box, Theme, Typography } from '@mui/material'
+import { User } from '@myTypes/auth'
+import { useAuth } from '@hooks/useAuth'
+import { UserCard } from '@components/dashboard/right_column/UserCard'
 
 export const SuggestUsers: React.FC = () => {
   const { user } = useAuth()

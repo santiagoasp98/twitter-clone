@@ -2,9 +2,9 @@ import {
   followUserRequest,
   isFollowingRequest,
   unfollowUserRequest,
-} from '../api/followers'
-import { User } from '../types/auth'
-import { Follower } from '../types/follower'
+} from '@api/followers'
+import { User } from '@myTypes/auth'
+import { Follower } from '@myTypes/follower'
 
 export const checkFollowing = async (userLoggedIn: User, user: User) => {
   if (userLoggedIn && user) {

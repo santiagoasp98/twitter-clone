@@ -1,4 +1,4 @@
-import { User } from './auth'
+import { User } from '@myTypes/auth'
 
 export interface Tweet {
   _id: string

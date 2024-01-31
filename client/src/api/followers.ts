@@ -1,5 +1,5 @@
-import { Follower } from '../types/follower'
-import axiosInstance from './axios'
+import { Follower } from '@myTypes/follower'
+import axiosInstance from '@api/axios'
 
 const BASE_URL = '/followers'
 

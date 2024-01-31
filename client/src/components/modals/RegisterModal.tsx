@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   Alert,
   Box,
@@ -11,13 +12,13 @@ import {
   useTheme,
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
-import { useState } from 'react'
-import { useAuth } from '../../hooks/useAuth'
-import { CreateUserDto } from '../../types/auth'
-import { useNavigate } from 'react-router-dom'
-import { DateFields } from '../utils/DateFields'
-import getModalStyle from '../../utils/modalStyle'
+
 import { AxiosError } from 'axios'
+import { useAuth } from '@hooks/useAuth'
+import { CreateUserDto } from '@myTypes/auth'
+import { useNavigate } from 'react-router-dom'
+import { DateFields } from '@components/utils/DateFields'
+import getModalStyle from '@utils/modalStyle'
 
 interface RegisterModalProps {
   visible: boolean

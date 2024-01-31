@@ -1,7 +1,7 @@
 import { Box, Avatar, Typography, Theme } from '@mui/material'
-import { User } from '../types/auth'
+import { User } from '@myTypes/auth'
 
-import profilePic from '../assets/profile-picture.jpeg'
+import profilePic from '@assets/profile-picture.jpeg'
 import { useNavigate } from 'react-router-dom'
 
 interface UserCardProps {

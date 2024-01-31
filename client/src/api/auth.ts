@@ -1,5 +1,5 @@
-import { CreateUserDto, UserLoginDto, UserUpdateDto } from '../types/auth'
-import axiosInstance from './axios'
+import { CreateUserDto, UserLoginDto, UserUpdateDto } from '@myTypes/auth'
+import axiosInstance from '@api/axios'
 
 const BASE_URL = '/auth'
 

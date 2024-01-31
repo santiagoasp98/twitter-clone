@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { TweetsContext } from '../context/TweetsContext'
+import { TweetsContext } from '@context/TweetsContext'
 
 export const useTweets = () => {
   const context = useContext(TweetsContext)

@@ -6,7 +6,8 @@ import {
   Select,
   Typography,
 } from '@mui/material'
-import { getDaysInMonth, months, years } from '../../utils/dateUtils'
+
+import { getDaysInMonth, months, years } from '@utils/dateUtils'
 
 interface DateFieldsProps {
   day: number

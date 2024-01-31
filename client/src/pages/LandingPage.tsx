@@ -1,12 +1,18 @@
-import { Button, Container, Divider, Theme, Typography } from '@mui/material'
-import Grid from '@mui/material/Grid'
-
-import twLogo from '../assets/twitter-logo.svg'
 import { useEffect, useState } from 'react'
-import { RegisterModal } from '../components/modals/RegisterModal'
-import { LoginModal } from '../components/modals/LoginModal'
-import { useAuth } from '../hooks/useAuth'
+import {
+  Button,
+  Container,
+  Divider,
+  Theme,
+  Typography,
+  Grid,
+} from '@mui/material'
 import { useNavigate } from 'react-router-dom'
+
+import twLogo from '@assets/twitter-logo.svg'
+import { RegisterModal } from '@components/modals/RegisterModal'
+import { LoginModal } from '@components/modals/LoginModal'
+import { useAuth } from '@hooks/useAuth'
 
 export const LandingPage: React.FC = () => {
   const [openRegister, setOpenRegister] = useState<boolean>(false)

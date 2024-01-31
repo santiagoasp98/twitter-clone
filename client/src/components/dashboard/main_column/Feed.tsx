@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Tweet } from '../types/tweet'
-import { getFeedForUserRequest } from '../api/tweets'
-import { useAuth } from '../hooks/useAuth'
-import { Tweets } from './Tweets'
+import { Tweet } from '@myTypes/tweet'
+import { getFeedForUserRequest } from '@api/tweets'
+import { useAuth } from '@hooks/useAuth'
+import { Tweets } from '@components/tweets/Tweets'
 import { Box, CircularProgress, Theme, Typography } from '@mui/material'
 
 export const Feed: React.FC = () => {
