@@ -13,6 +13,15 @@ Building a Twitter clone provides a great opportunity to learn and practice vari
 - **Database**: MongoDB, a source-available cross-platform document-oriented database program.
 - **Styling**: Material-UI, a popular React UI framework that implements Google's Material Design.
 
+## Some photos
+
+![Landing](photos/photo1.jpg)
+![Example Image](photos/photo2.jpg)
+![Example Image](photos/photo3.jpg)
+![Example Image](photos/photo4.jpg)
+![Example Image](photos/photo5.jpg)
+![Example Image](photos/photo6.jpg)
+
 ## Getting Started
 
 To get a local copy up and running, follow these steps:
