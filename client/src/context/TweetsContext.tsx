@@ -11,12 +11,18 @@ import { useParams } from 'react-router-dom'
 import { Tweet } from '@myTypes/tweet'
 import { User } from '@myTypes/auth'
 import { useAuth } from '@hooks/useAuth'
-import { getTweetsFromUser } from '@api/tweets'
+import {
+  getTweetsFromUser,
+  likeTweetRequest,
+  unlikeTweetRequest,
+} from '@api/tweets'
 
 interface TweetsContextType {
   tweets: Tweet[]
   loadingTweets: boolean
   fetchTweets: () => Promise<void>
+  likeTweet: (tweetId: string, userId: string) => void
+  unlikeTweet: (tweetId: string, userId: string) => void
 }
 
 interface TweetsContextProps {
@@ -30,7 +36,7 @@ export const TweetsContext = createContext<TweetsContextType | undefined>(
 export const TweetsProvider: React.FC<TweetsContextProps> = ({ children }) => {
   const [tweetsOwner, setTweetsOwner] = useState<User | null>(null)
   const { username } = useParams()
-  const { getUserByUsername } = useAuth()
+  const { user, getUserByUsername, token } = useAuth()
   const prevUserRef = useRef(tweetsOwner)
 
   const [tweets, setTweets] = useState<Tweet[]>([])
@@ -75,8 +81,49 @@ export const TweetsProvider: React.FC<TweetsContextProps> = ({ children }) => {
     prevUserRef.current = tweetsOwner
   }, [fetchTweets, tweetsOwner])
 
+  /*******************************/
+
+  const likeTweet = async (tweetId: string) => {
+    try {
+      if (user) {
+        const response = await likeTweetRequest(tweetId, user.id, token)
+        const likedTweet: Tweet = response.data
+        const newTweets = tweets.map((tweet) => {
+          if (tweet._id === tweetId) {
+            return likedTweet
+          }
+          return tweet
+        })
+
+        setTweets(newTweets)
+      }
+    } catch (error) {
+      console.log('Error trying to like the tweet: ', error)
+    }
+  }
+
+  const unlikeTweet = async (tweetId: string) => {
+    try {
+      if (user) {
+        const response = await unlikeTweetRequest(tweetId, user.id, token)
+        const newTweets = tweets.map((tweet) => {
+          if (tweet._id === tweetId) {
+            return response.data
+          }
+          return tweet
+        })
+
+        setTweets(newTweets)
+      }
+    } catch (error) {
+      console.log('Error trying to unlike the tweet: ', error)
+    }
+  }
+
   return (
-    <TweetsContext.Provider value={{ tweets, loadingTweets, fetchTweets }}>
+    <TweetsContext.Provider
+      value={{ tweets, loadingTweets, fetchTweets, likeTweet, unlikeTweet }}
+    >
       {children}
     </TweetsContext.Provider>
   )

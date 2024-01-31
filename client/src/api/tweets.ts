@@ -25,18 +25,30 @@ export const deleteTweetRequest = (tweetId: string, token: string) =>
     headers: { Authorization: `Bearer ${token}` },
   })
 
-export const likeTweetRequest = (tweetId: string, token: string) =>
+export const likeTweetRequest = (
+  tweetId: string,
+  userId: string,
+  token: string,
+) =>
   axiosInstance.post(
     `${BASE_URL}/like/${tweetId}`,
-    {},
-    { headers: { Authorization: `Bearer ${token}` } },
+    { userId },
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    },
   )
 
-export const unlikeTweetRequest = (tweetId: string, token: string) =>
+export const unlikeTweetRequest = (
+  tweetId: string,
+  userId: string,
+  token: string,
+) =>
   axiosInstance.post(
     `${BASE_URL}/unlike/${tweetId}`,
-    {},
-    { headers: { Authorization: `Bearer ${token}` } },
+    { userId },
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    },
   )
 
 export const getFeedForUserRequest = (userId: string, token: string) =>

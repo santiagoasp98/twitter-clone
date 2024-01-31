@@ -5,7 +5,7 @@ export interface Tweet {
   content: string
   author: User
   tweetedAt: string
-  likesCount: number
+  likes: string[]
 }
 
 export interface CreateTweet {

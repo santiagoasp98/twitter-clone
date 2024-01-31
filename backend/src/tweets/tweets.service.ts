@@ -1,4 +1,5 @@
 import {
+    ConflictException,
     Injectable,
     InternalServerErrorException,
     NotFoundException,
@@ -65,7 +66,7 @@ export class TweetsService {
                 throw new NotFoundException('Could not find the tweet')
             }
 
-            return updatedTweet
+            return 'Tweet updated successfully'
         } catch (error) {
             console.log(error)
             throw new InternalServerErrorException(
@@ -87,14 +88,22 @@ export class TweetsService {
         return { message: 'Tweet deleted successfully' }
     }
 
-    async likeTweet(tweetId: string) {
+    async likeTweet(tweetId: string, userId: string) {
         try {
-            const tweetFound = await this.tweetModel.findById(tweetId)
+            const tweetFound = await this.tweetModel
+                .findById(tweetId)
+                .populate({
+                    path: 'author',
+                    select: '_id username fullname',
+                })
             if (!tweetFound) {
                 throw new NotFoundException('Could not find the tweet')
             }
 
-            tweetFound.likesCount++
+            if (tweetFound.likes.includes(userId)) {
+                throw new ConflictException('This user already liked the tweet')
+            }
+            tweetFound.likes.push(userId)
             const savedTweet = await tweetFound.save()
 
             return savedTweet
@@ -106,16 +115,23 @@ export class TweetsService {
         }
     }
 
-    async unlikeTweet(tweetId: string) {
+    async unlikeTweet(tweetId: string, userId: string) {
         try {
-            const tweetFound = await this.tweetModel.findById(tweetId)
+            const tweetFound = await this.tweetModel
+                .findById(tweetId)
+                .populate({
+                    path: 'author',
+                    select: '_id username fullname',
+                })
             if (!tweetFound) {
                 throw new NotFoundException('Could not find the tweet')
             }
 
-            if (tweetFound.likesCount > 0) {
-                tweetFound.likesCount--
+            if (!tweetFound.likes.includes(userId)) {
+                throw new ConflictException('The user has not liked the tweet')
             }
+
+            tweetFound.likes = tweetFound.likes.filter((id) => id !== userId)
             const savedTweet = await tweetFound.save()
 
             return savedTweet

@@ -19,6 +19,7 @@ import profilePic from '@assets/profile-picture.jpeg'
 import tweetComment from '@assets/tweet-comment.svg'
 import tweetRetweet from '@assets/tweet-retweet.svg'
 import tweetLike from '@assets/tweet-like.svg'
+import tweetLiked from '@assets/tweet-liked.svg'
 import tweetStats from '@assets/tweet-stats.svg'
 
 import moment from 'moment'
@@ -36,13 +37,15 @@ const iconSize = 18
 
 export const TweetCard: React.FC<TweetCardProps> = ({ tweet }) => {
   const { user: loggedInUser, token } = useAuth()
-  const { fetchTweets: reFetchTweets } = useTweets()
+  const { fetchTweets: reFetchTweets, likeTweet, unlikeTweet } = useTweets()
   const navigate = useNavigate()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   const [editingTweet, setEditingTweet] = useState(false)
   const [newTweetContent, setNewTweetContent] = useState(tweet.content)
+
+  const hasLiked = tweet.likes.includes(loggedInUser?.id || '')
 
   const [randomViews, setRandomViews] = useState(
     Math.floor(Math.random() * 500) + 1,
@@ -230,7 +233,13 @@ export const TweetCard: React.FC<TweetCardProps> = ({ tweet }) => {
                 }}
               >
                 <img
-                  src={tweetLike}
+                  onClick={() =>
+                    loggedInUser &&
+                    (hasLiked
+                      ? unlikeTweet(tweet._id, loggedInUser.id)
+                      : likeTweet(tweet._id, loggedInUser.id))
+                  }
+                  src={hasLiked ? tweetLiked : tweetLike}
                   width={iconSize}
                   height={iconSize}
                   style={{ marginRight: 5, cursor: 'pointer' }}
@@ -239,7 +248,7 @@ export const TweetCard: React.FC<TweetCardProps> = ({ tweet }) => {
                   variant="body2"
                   sx={{ color: (theme: Theme) => theme.myPalette.greyFont }}
                 >
-                  {tweet.likesCount > 0 && tweet.likesCount}
+                  {tweet.likes.length > 0 && tweet.likes.length}
                 </Typography>
               </Box>
               <Box

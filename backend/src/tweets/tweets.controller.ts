@@ -43,14 +43,20 @@ export class TweetsController {
 
     @UseGuards(AuthGuard)
     @Post('/like/:id')
-    async likeTweet(@Param('id') tweetId: string) {
-        return this.tweetsService.likeTweet(tweetId)
+    async likeTweet(
+        @Param('id') tweetId: string,
+        @Body() data: { userId: string },
+    ) {
+        return this.tweetsService.likeTweet(tweetId, data.userId)
     }
 
     @UseGuards(AuthGuard)
     @Post('/unlike/:id')
-    async unlikeTweet(@Param('id') tweetId: string) {
-        return this.tweetsService.unlikeTweet(tweetId)
+    async unlikeTweet(
+        @Param('id') tweetId: string,
+        @Body() data: { userId: string },
+    ) {
+        return this.tweetsService.unlikeTweet(tweetId, data.userId)
     }
 
     @UseGuards(AuthGuard)

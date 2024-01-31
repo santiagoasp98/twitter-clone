@@ -22,9 +22,10 @@ export class Tweet {
     tweetedAt: Date
 
     @Prop({
-        default: 0,
+        type: [String],
+        default: [],
     })
-    likesCount: number
+    likes: string[]
 }
 
 export const TweetSchema = SchemaFactory.createForClass(Tweet)
