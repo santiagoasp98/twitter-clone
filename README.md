@@ -24,6 +24,10 @@ Building a Twitter clone provides a great opportunity to learn and practice vari
 
 ## Getting Started
 
+Try with this link: https://twitter-clone-frontend-ecru.vercel.app/
+
+Or...
+
 To get a local copy up and running, follow these steps:
 
 1. Clone the repository:
@@ -39,13 +43,15 @@ To get a local copy up and running, follow these steps:
     npm install
     ```
 
-3. Start the backend server:
+3. Modify the files backend/src/main.ts and client\src\api\axios.ts to establish the local connection.
+
+4. Start the backend server:
     ```sh
     cd backend
     npm run start
     ```
 
-4. Start the frontend server:
+5. Start the frontend server:
     ```sh
     cd client
     npm run dev
