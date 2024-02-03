@@ -6,6 +6,8 @@ async function bootstrap() {
     app.enableCors({
         origin: 'https://twitter-clone-frontend-ecru.vercel.app', // or http://localhost:5173
         credentials: true,
+        allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
+        methods: 'GET, POST, PUT, DELETE, OPTIONS',
     })
     await app.listen(process.env.PORT)
 }
